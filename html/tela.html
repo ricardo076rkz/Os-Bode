@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="PT-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feir.ON</title>
+
+    <link rel="stylesheet" href="../css/style1.css">
+    <script src="../js/tela1.js" defer></script>
+</head>
+<body>
+    <main class="Tela">
+        <div class="Perfil"></div>
+
+        <img src="../img/logo.png" alt="logo" class="logo">
+
+        <h1 class="title">Nordestinando</h1>
+    <form id="form-login">
+        <div class="perfil">
+            <label class="perfil-opcao">
+                <input type="radio" name="perfil" value="Cliente" checked>
+                <span>Consumidor</span>
+            </label>
+            <label class="perfil-opcao">
+                <input type="radio" name="perfil" value="Vendedor">
+                <span>Vendedor</span>
+            </label>
+        </div>
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
+
+            <label for="password">Senha</label>
+            <input type="password" id="password" name="password" placeholder="Sua senha" required>
+
+            <!---campos extras para o vendedor--->
+
+            <div id="campos-vendedor">
+                <label for="banca">Nome da Banca</label>
+                <input type="text" id="banca" name="banca" placeholder="Nome da banca" required>
+
+                <label for="setor">Setor</label>
+                <input type="text" id="setor" name="setor" placeholder="Setor" required>
+
+                <label for="bloco">Bloco</label>
+                <input type="text" id="bloco" name="bloco" placeholder="Bloco" required>
+            </div>
+            <div class="opcoes"></div>
+                <a href="#">Esqueci minha senha</a>
+            <div class="opcoes"></div>
+                <a href="#">Criar conta</a>
+
+            <button type="submit" class="botao">Entrar</button>
+          </form>
+          </main>
+    </section>
+
+
+</body>
+</html>
