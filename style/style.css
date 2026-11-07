@@ -1,0 +1,176 @@
+:root {
+  --fundo: #1f1a18;
+  --tela: #2e2724;
+  --card: #3b332f;
+  --borda: #5a4d45;
+  --texto: #f5ede4;
+  --suave: #c9bbb0;
+  --vermelho: #b3261e;
+  --amarelo: #f2b01e;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: var(--fundo);
+  color: var(--texto);
+  display: flex;
+  justify-content: center;
+}
+
+.tela {
+  width: 100%;
+  max-width: 420px;
+  min-height: 100vh;
+  background: var(--tela);
+  padding: 24px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* botões */
+.botao {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin-top: 12px;
+  background: var(--vermelho);
+  color: #fff;
+  border: 2px solid var(--vermelho);
+  border-radius: 6px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.cadastrar {
+  background: transparent;
+}
+
+/* tela inicial */
+.inicio {
+  text-align: center;
+}
+
+.inicio img {
+  width: 110px;
+}
+
+.inicio h1 {
+  margin: 8px 0 20px;
+}
+
+.imagem {
+  height: 260px;
+  background: var(--card);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.imagem img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* fundo com a estação (login e cadastro) */
+.fundo-estacao {
+  background: linear-gradient(rgba(46, 39, 36, 0.88), rgba(46, 39, 36, 0.88)),
+    url("../js/img/estacao.jpg") center / cover no-repeat;
+  background-color: var(--tela);
+}
+
+.topo {
+  height: 140px;
+  background: var(--vermelho);
+  border-radius: 0 0 30px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: -24px -24px 24px;
+  font-size: 48px;
+}
+
+.topo-pequeno {
+  height: 110px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.topo-pequeno h1 {
+  font-size: 22px;
+}
+
+/* formulários */
+label {
+  display: block;
+  margin: 16px 0 6px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--borda);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--texto);
+  font-size: 16px;
+  font-family: inherit;
+}
+
+textarea {
+  min-height: 80px;
+}
+
+.esqueci {
+  display: block;
+  text-align: center;
+  margin: 18px 0 20px;
+  font-size: 14px;
+  color: var(--amarelo);
+}
+
+.subtitulo {
+  margin-top: 24px;
+  font-size: 15px;
+  color: var(--amarelo);
+}
+
+.dupla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ajustes para celular */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+button,
+.botao {
+  min-height: 48px;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.botao:active {
+  opacity: 0.75;
+}
