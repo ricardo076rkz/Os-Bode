@@ -133,4 +133,3 @@ FROM evento
 WHERE dia_semana = 'Quinta-feira';
 
 
-ALTER USER postgres WITH PASSWORD '22112006';
