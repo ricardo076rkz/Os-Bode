@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Recuperar senha</title>
+  <link rel="stylesheet" href="../style/style.css">
+</head>
+<body>
+  <main class="tela fundo-estacao">
+    <div class="topo topo-pequeno">
+      <h1>Recuperar senha</h1>
+    </div>
+
+    <form id="form-recuperar" class="cartao">
+      <p>Digite o email cadastrado. Vamos enviar um link para criar uma nova senha.</p>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+
+      <button type="submit" class="botao">Enviar link</button>
+
+      <p id="aviso-enviado" class="aviso-ok oculto">Pronto! Se o email estiver cadastrado, você vai receber o link.</p>
+    </form>
+
+    <a class="esqueci" href="comerciante.html">← Voltar ao login</a>
+  </main>
+
+  <script src="../js/recuperar.js"></script>
+</body>
+</html>

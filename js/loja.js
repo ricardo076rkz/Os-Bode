@@ -1,14 +1,7 @@
 // Minha loja - Nordestinando
+// (as funções pegar, guardar, criar, dinheiro... estão no comum.js)
 
 // ---------- dados de exemplo (depois vem do banco) ----------
-const avaliacoes = [
-  { cliente: "Maria S.", nota: 5, comentario: "Pastel crocante e atendimento excelente!", data: "2026-10-28" },
-  { cliente: "João P.", nota: 4, comentario: "Muito bom, só demorou um pouco no sábado.", data: "2026-10-30" },
-  { cliente: "Ana L.", nota: 5, comentario: "Recomendo, voltarei mais vezes.", data: "2026-11-02" },
-  { cliente: "Carlos M.", nota: 3, comentario: "Bom sabor, mas o caldo de cana estava morno.", data: "2026-11-03" },
-  { cliente: "Beatriz R.", nota: 5, comentario: "Preço justo e porção generosa.", data: "2026-11-05" }
-];
-
 const pedidos = [
   { item: "Pastel de carne", valor: 8.5, criado_em: "2026-11-01" },
   { item: "Pastel de queijo", valor: 7, criado_em: "2026-11-02" },
@@ -22,61 +15,8 @@ const diasVisitas = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
 const valoresVisitas = [12, 18, 15, 22, 30, 41, 27];
 
 // vitrine e eventos ficam salvos no navegador (localStorage)
-let vitrine = pegar("vitrineLoja", [
-  { id: 1, nome: "Pastel de carne", valor: 8.5, foto: "../js/img/pastel-carne.jpg" },
-  { id: 2, nome: "Pastel de queijo", valor: 7, foto: "../js/img/pastel-queijo.jpg" },
-  { id: 3, nome: "Caldo de cana", valor: 6, foto: "../js/img/caldo-de-cana.jpg" }
-]);
+let vitrine = pegar("vitrineLoja", vitrinePadrao);
 let eventos = pegar("eventosLoja", []);
-
-// ---------- funções pequenas ----------
-function pegar(chave, padrao) {
-  const texto = localStorage.getItem(chave);
-  if (texto) {
-    return JSON.parse(texto);
-  }
-  return padrao;
-}
-
-function guardar(chave, dados) {
-  try {
-    localStorage.setItem(chave, JSON.stringify(dados));
-  } catch (erro) {
-    alert("Não deu para salvar. Tente uma foto menor.");
-  }
-}
-
-function pegarId(id) {
-  return document.getElementById(id);
-}
-
-function criar(tag, classe, texto) {
-  const elemento = document.createElement(tag);
-  if (classe) elemento.className = classe;
-  if (texto !== undefined) elemento.textContent = texto;
-  return elemento;
-}
-
-function dinheiro(valor) {
-  return "R$ " + valor.toFixed(2).replace(".", ",");
-}
-
-function dataBR(texto) {
-  const partes = texto.split("-");
-  return partes[2] + "/" + partes[1] + "/" + partes[0];
-}
-
-function estrelas(nota) {
-  return "★".repeat(nota) + "☆".repeat(5 - nota);
-}
-
-function mediaNotas() {
-  let soma = 0;
-  avaliacoes.forEach(function (a) {
-    soma += a.nota;
-  });
-  return soma / avaliacoes.length;
-}
 
 // diminui a foto antes de guardar, senão enche o localStorage
 function reduzirFoto(arquivo, depois) {
@@ -109,7 +49,7 @@ function abrirSecao(id) {
     s.classList.add("oculto");
   });
   pegarId(id).classList.remove("oculto");
-  window.scrollTo(0, 0);
+  document.querySelector(".tela").scrollTop = 0;
 
   // marca o botão do menu de baixo que está ativo
   document.querySelectorAll(".menu-baixo button").forEach(function (b) {
@@ -123,7 +63,7 @@ function abrirSecao(id) {
   if (id == "estatisticas") mostrarEstatisticas();
 }
 
-// qualquer botão com data-abrir troca de seção (menu de baixo, Gerenciar, Ver loja)
+// qualquer botão com data-abrir troca de seção (menu de baixo e Gerenciar)
 document.addEventListener("click", function (e) {
   const botao = e.target.closest("[data-abrir]");
   if (botao) {
@@ -133,7 +73,7 @@ document.addEventListener("click", function (e) {
 
 // ---------- início ----------
 function mostrarResumo() {
-  pegarId("r-nota").textContent = mediaNotas().toFixed(1).replace(".", ",");
+  pegarId("r-nota").textContent = notaFormatada(mediaNotas());
   pegarId("r-aval").textContent = avaliacoes.length;
   pegarId("r-itens").textContent = vitrine.length;
   pegarId("r-eventos").textContent = eventos.length;
@@ -212,7 +152,7 @@ function mostrarEventos() {
   eventos.forEach(function (ev) {
     const card = criar("div", "evento");
     card.appendChild(criar("h4", "", ev.nome));
-    card.appendChild(criar("p", "", ev.dia + " às " + ev.horario));
+    card.appendChild(criar("p", "evento-quando", ev.dia + " às " + ev.horario));
     if (ev.descricao) card.appendChild(criar("p", "", ev.descricao));
     if (ev.latitude && ev.longitude) {
       card.appendChild(criar("p", "local", "Local: " + ev.latitude + ", " + ev.longitude));
@@ -268,7 +208,7 @@ pegarId("btn-local").addEventListener("click", function () {
 // ---------- avaliações ----------
 function mostrarAvaliacoes() {
   const media = mediaNotas();
-  pegarId("nota-media").textContent = media.toFixed(1).replace(".", ",");
+  pegarId("nota-media").textContent = notaFormatada(media);
   pegarId("estrelas-media").textContent = estrelas(Math.round(media));
   pegarId("total-aval").textContent = avaliacoes.length + " avaliações";
   mostrarListaAvaliacoes();
@@ -312,7 +252,7 @@ function mostrarEstatisticas() {
   pegarId("k-total").textContent = dinheiro(total);
   pegarId("k-pedidos").textContent = pedidos.length;
   pegarId("k-ticket").textContent = dinheiro(total / pedidos.length);
-  pegarId("k-nota").textContent = mediaNotas().toFixed(1).replace(".", ",");
+  pegarId("k-nota").textContent = notaFormatada(mediaNotas());
 
   // gráfico de visitas (as barras crescem com a transição do css)
   const grafico = pegarId("grafico");
