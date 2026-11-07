@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Cadastrar Estabelecimento</title>
+  <link rel="stylesheet" href="../style/style.css">
+</head>
+<body>
+  <div class="tela fundo-estacao">
+    <div class="topo topo-pequeno">
+      <h1>Cadastrar estabelecimento</h1>
+    </div>
+
+    <form id="form-cadastro">
+      <p class="subtitulo">Dados de acesso</p>
+
+      <label for="nome">Nome</label>
+      <input type="text" id="nome" name="nome" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" name="senha" minlength="6" required>
+
+      <input type="hidden" name="perfil" value="lojista">
+
+      <p class="subtitulo">Dados do estabelecimento</p>
+
+      <label for="cnpj">CNPJ</label>
+      <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00"
+             pattern="\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}" title="Digite o CNPJ completo" required>
+
+      <label for="nome_loja">Nome da loja</label>
+      <input type="text" id="nome_loja" name="nome_loja" required>
+
+      <label for="segmento">Segmento</label>
+      <select id="segmento" name="segmento" required>
+        <option value="">Selecione</option>
+        <option>Alimentação</option>
+        <option>Artesanato</option>
+        <option>Vestuário</option>
+        <option>Serviços</option>
+        <option>Outros</option>
+      </select>
+
+      <div class="dupla">
+        <div>
+          <label for="latitude">Latitude</label>
+          <input type="number" id="latitude" name="latitude" step="any">
+        </div>
+        <div>
+          <label for="longitude">Longitude</label>
+          <input type="number" id="longitude" name="longitude" step="any">
+        </div>
+      </div>
+
+      <button type="button" id="btn-local" class="botao cadastrar">Usar minha localização</button>
+      <button type="submit" class="botao">Cadastrar</button>
+      <a class="esqueci" href="comerciante.html">Já tenho conta</a>
+    </form>
+  </div>
+
+  <script src="../js/cadastro.js"></script>
+</body>
+</html>

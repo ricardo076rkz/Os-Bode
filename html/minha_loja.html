@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Minha loja</title>
+  <link rel="stylesheet" href="../style/style.css">
+  <link rel="stylesheet" href="../style/loja.css">
+</head>
+<body>
+  <div class="tela">
+
+    <!-- INÍCIO -->
+    <section id="inicio" class="secao">
+      <h1>Minha loja</h1>
+
+      <div class="card-loja">
+        <h2>Pastelaria</h2>
+        <p>Rua Blablabla, nº 10</p>
+        <button type="button" class="link" data-abrir="vitrine">Ver loja →</button>
+      </div>
+
+      <div class="resumo">
+        <div class="mini"><strong id="r-nota">0</strong><span>Nota média</span></div>
+        <div class="mini"><strong id="r-aval">0</strong><span>Avaliações</span></div>
+        <div class="mini"><strong id="r-itens">0</strong><span>Itens</span></div>
+        <div class="mini"><strong id="r-eventos">0</strong><span>Eventos</span></div>
+      </div>
+
+      <h3>Gerenciar</h3>
+      <div class="grade">
+        <button type="button" class="item" data-abrir="vitrine">Vitrine</button>
+        <button type="button" class="item" data-abrir="evento">Anunciar evento</button>
+        <button type="button" class="item" data-abrir="avaliacoes">Avaliações</button>
+        <button type="button" class="item" data-abrir="estatisticas">Estatísticas</button>
+      </div>
+    </section>
+
+    <!-- VITRINE -->
+    <section id="vitrine" class="secao oculto">
+      <h1>Vitrine</h1>
+
+      <form id="form-vitrine">
+        <label for="v-nome">Nome do item</label>
+        <input type="text" id="v-nome" required>
+
+        <label for="v-valor">Valor (R$)</label>
+        <input type="number" id="v-valor" step="0.01" min="0" required>
+
+        <label for="v-foto">Foto (opcional)</label>
+        <input type="file" id="v-foto" accept="image/*">
+
+        <button type="submit" class="botao">Adicionar à vitrine</button>
+      </form>
+
+      <div id="lista-vitrine" class="vitrine"></div>
+    </section>
+
+    <!-- ANUNCIAR EVENTO -->
+    <section id="evento" class="secao oculto">
+      <h1>Anunciar evento</h1>
+
+      <form id="form-evento">
+        <label for="ev-nome">Nome do evento</label>
+        <input type="text" id="ev-nome" required>
+
+        <div class="dupla">
+          <div>
+            <label for="ev-dia">Dia da semana</label>
+            <select id="ev-dia">
+              <option>Segunda</option>
+              <option>Terça</option>
+              <option>Quarta</option>
+              <option>Quinta</option>
+              <option>Sexta</option>
+              <option>Sábado</option>
+              <option>Domingo</option>
+            </select>
+          </div>
+          <div>
+            <label for="ev-hora">Horário</label>
+            <input type="time" id="ev-hora" required>
+          </div>
+        </div>
+
+        <label for="ev-desc">Descrição</label>
+        <textarea id="ev-desc"></textarea>
+
+        <div class="dupla">
+          <div>
+            <label for="ev-lat">Latitude</label>
+            <input type="number" id="ev-lat" step="any">
+          </div>
+          <div>
+            <label for="ev-lng">Longitude</label>
+            <input type="number" id="ev-lng" step="any">
+          </div>
+        </div>
+
+        <button type="button" id="btn-local" class="botao cadastrar">Usar minha localização</button>
+        <button type="submit" class="botao">Anunciar</button>
+      </form>
+
+      <div id="lista-eventos"></div>
+    </section>
+
+    <!-- AVALIAÇÕES -->
+    <section id="avaliacoes" class="secao oculto">
+      <h1>Avaliações</h1>
+
+      <div class="media-nota">
+        <strong id="nota-media">0</strong>
+        <span id="estrelas-media" class="estrelas"></span>
+        <small id="total-aval"></small>
+      </div>
+
+      <label for="filtro-nota">Filtrar por nota</label>
+      <select id="filtro-nota">
+        <option value="todas">Todas</option>
+        <option value="5">5 estrelas</option>
+        <option value="4">4 estrelas</option>
+        <option value="3">3 estrelas</option>
+        <option value="2">2 estrelas</option>
+        <option value="1">1 estrela</option>
+      </select>
+
+      <div id="lista-aval"></div>
+    </section>
+
+    <!-- ESTATÍSTICAS -->
+    <section id="estatisticas" class="secao oculto">
+      <h1>Estatísticas</h1>
+
+      <div class="kpis">
+        <div class="kpi"><span>Total vendido</span><strong id="k-total">0</strong></div>
+        <div class="kpi"><span>Pedidos</span><strong id="k-pedidos">0</strong></div>
+        <div class="kpi"><span>Ticket médio</span><strong id="k-ticket">0</strong></div>
+        <div class="kpi"><span>Nota média</span><strong id="k-nota">0</strong></div>
+      </div>
+
+      <h3>Visitas na semana</h3>
+      <div id="grafico" class="grafico"></div>
+
+      <h3>Últimos pedidos</h3>
+      <div id="lista-pedidos"></div>
+    </section>
+
+  </div>
+
+  <nav class="menu-baixo">
+    <button type="button" class="ativo" data-abrir="inicio"><span>🏠</span>Início</button>
+    <button type="button" data-abrir="vitrine"><span>🛍️</span>Vitrine</button>
+    <button type="button" data-abrir="evento"><span>📣</span>Eventos</button>
+    <button type="button" data-abrir="avaliacoes"><span>⭐</span>Avaliações</button>
+    <button type="button" data-abrir="estatisticas"><span>📊</span>Estatísticas</button>
+  </nav>
+
+  <script src="../js/loja.js"></script>
+</body>
+</html>

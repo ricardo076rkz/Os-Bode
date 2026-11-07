@@ -1,0 +1,27 @@
+MODELAGEM CONCEITUAL (DER)
+
+1. HERANÇA (ESPECIALIZAÇÃO)
+- USUARIO (Pai): id_usuario, nome, email, senha, perfil
+- CLIENTE (Filha - É UM): endereco, telefone
+- LOGISTA (Filha - É UM): cnpj
+
+2. ENTIDADES E ATRIBUTOS
+- LOJA: id_loja, nome_loja, segmento, latitude, longitude, avaliacao_media
+- AVALIACAO: id_avaliacao, nota, comentario, data_criacao
+- PEDIDO: id_pedido, item, valor, criado_em
+- EVENTO: id_evento, nome, dia_semana, horario, descricao, latitude, longitude
+
+3. RELACIONAMENTOS E CARDINALIDADES
+- LOGISTA (1,1) -- POSSUI --> (1,N) LOJA
+- CLIENTE (0,N) -- FAZ --> (1,1) AVALIACAO (1,1) <-- RECEBE -- (0,N) LOJA
+- CLIENTE (0,N) -- RESERVA --> (1,1) PEDIDO (1,1) <-- REGISTRA -- (0,N) LOJA
+
+
+
+
+
+
+
+Link para visualizar
+
+https://drive.google.com/file/d/1hzQ0WDjAdJdi4cBsWmwKptbsEtCHirSx/view?usp=drive_link

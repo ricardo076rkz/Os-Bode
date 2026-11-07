@@ -1,0 +1,64 @@
+MODELAGEM LÓGICA
+
+
+
+USUÁRIO
+PK = id_usuario
+id_usuario
+Nome
+Email
+Senha
+Perfil
+
+CLIENTE
+PK/FK = id_usuario
+id_usuario
+endereço
+telefone
+
+AVALIAÇÃO
+PK = id_avaliação
+FK = id_cliente
+FK = id_logista
+id_avaliação
+Nota
+Comentario
+Data_criação
+id_cliente
+id_logista
+
+PEDIDO
+PK = id_pedido
+FK = id_cliente
+FK = id_logista
+Id_pedido
+Item
+Valor
+Criado_em
+Id_cliente
+Id_logista
+
+EVENTO
+PK = id_evento
+id_evento
+Nome
+Dia_semana
+Horario
+Descrição
+Latitude
+Longitude
+
+LOGISTA
+PK/FK = usuario.id_usuario
+id_usuario
+cnpj
+
+LOJA
+PK = id_loJa
+FK = logistica.id_usuario
+Id_logista
+Nome_loja
+Segmento
+Latitude
+Longitude
+avaliacao_media
