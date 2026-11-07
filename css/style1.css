@@ -1,0 +1,150 @@
+        .perfil {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #fff1e6;
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 20px;
+}
+.perfil-opcao input { display: none; }
+.perfil-opcao span {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 9px;
+  font-size: .9rem;
+  color: #7c2d12; 
+  cursor: pointer;
+}
+.perfil-opcao input:checked + span {
+  background: #fff;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+}
+
+#campos-vendedor { display: none; }
+#campos-vendedor.aberto { display: block; }
+
+.duas-colunas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+:root {
+  --laranja: #e8692f;
+  --laranja-escuro: #c2410c;
+  --creme: #fff1e6;
+  --creme-claro: #fff8f2;
+  --texto: #7c2d12;
+  --borda: #f3dccb;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(160deg, #a36a1f, #cfb464);
+}
+
+.tela {
+  width: 100%;
+  max-width: 390px;
+  min-height: 760px;
+  background: linear-gradient(180deg, var(--creme), var(--creme-claro));
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .4);
+  padding: 0 24px 32px;
+  text-align: center;
+}
+
+
+.logo { 
+width: 80px;
+height: auto; 
+max-width: 80%;
+display: block;
+margin: 0 auto 8px;
+}
+
+.title { 
+  font-size: 2rem; color: var(--laranja-escuro); 
+  padding: 10px;
+  width: 100%;
+  text-align: center;
+}
+
+.subtitle { font-size: .9rem; font-weight: 400; color: var(--texto); margin: 4px 0 20px; }
+
+form {
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: 20px;
+  padding: 16px;
+  text-align: left;
+}
+
+.perfil {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--creme);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 20px;
+}
+.perfil-opcao input { display: none; }
+.perfil-opcao span {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 9px;
+  font-size: .9rem;
+  color: var(--texto);
+  cursor: pointer;
+}
+.perfil-opcao input:checked + span {
+  background: #fff;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+}
+
+form label { display: block; font-size: .75rem; color: var(--texto); margin: 12px 0 6px; }
+.perfil-opcao { margin: 0; }
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  background: var(--creme-claro);
+  font-size: 1rem;
+  outline: none;
+}
+form input:focus { border-color: var(--laranja); }
+
+#campos-vendedor { display: none; }
+#campos-vendedor.aberto { display: block; }
+
+.duas-colunas { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.opcoes { margin: 16px 0; font-size: .75rem; text-align: right; }
+.opcoes a { color: var(--laranja-escuro); text-decoration: none; }
+
+.botao {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--laranja);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.botao:hover { background: var(--laranja-escuro); }
