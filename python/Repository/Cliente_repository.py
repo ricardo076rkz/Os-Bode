@@ -1,4 +1,4 @@
-from models.Cliente import Cliente
+from Models import Cliente
 from db import db
 
 class ClienteRepository:

@@ -1,7 +1,7 @@
 from Models import Cliente
 from Repository.Cliente_repository import ClienteRepository
-from exception.Usuario_existente_exception import UsuarioExistenteException
-from exception.Usuario_login_existente import UsuarioLoginExistenteException
+from Exception.Usuario_existente_exception import UsuarioExistenteException
+from Exception.Usuario_login_existente import UsuarioLoginExistenteException
 
 
 

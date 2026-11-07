@@ -1,4 +1,4 @@
-from Models.Lojista import Lojista
+from Models import Lojista
 
 class Loja(Lojista):
 
@@ -10,6 +10,8 @@ class Loja(Lojista):
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
     avaliacao_media = db.Column(db.Float, nullable=False)
+    
+    localizacao = db.relationship('Localizacao', backref='loja', uselist=False, cascade="all, delete-orphan")
 
 
     def to_dict(self):
@@ -21,4 +23,5 @@ class Loja(Lojista):
             'latitude': self.latitude,
             'longitude': self.longitude,
             'avaliacao_media': self.avaliacao_media
+            
         }

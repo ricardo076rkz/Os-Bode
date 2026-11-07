@@ -1,3 +1,6 @@
+from db import db
+
+
 class Evento(db.Model):
 
 
