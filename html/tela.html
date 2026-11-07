@@ -1,59 +1,57 @@
 <!DOCTYPE html>
-<html lang="PT-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feir.ON</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nordestinando - Entrar</title>
 
-    <link rel="stylesheet" href="../css/style1.css">
+    <link rel="stylesheet" href="../style/style.css">
     <script src="../js/tela1.js" defer></script>
 </head>
 <body>
-    <main class="Tela">
-        <div class="Perfil"></div>
-
-        <img src="../img/logo.png" alt="logo" class="logo">
+    <main class="tela entrar">
+        <img src="../js/img/logo-original.png" alt="Logo Nordestinando" class="logo">
 
         <h1 class="title">Nordestinando</h1>
-    <form id="form-login">
-        <div class="perfil">
-            <label class="perfil-opcao">
-                <input type="radio" name="perfil" value="Cliente" checked>
-                <span>Consumidor</span>
-            </label>
-            <label class="perfil-opcao">
-                <input type="radio" name="perfil" value="Vendedor">
-                <span>Vendedor</span>
-            </label>
-        </div>
+
+        <form id="form-login" class="cartao">
+            <div class="perfil">
+                <label class="perfil-opcao">
+                    <input type="radio" name="perfil" value="Cliente" checked>
+                    <span>Consumidor</span>
+                </label>
+                <label class="perfil-opcao">
+                    <input type="radio" name="perfil" value="Vendedor">
+                    <span>Vendedor</span>
+                </label>
+            </div>
+
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
 
             <label for="password">Senha</label>
             <input type="password" id="password" name="password" placeholder="Sua senha" required>
 
-            <!---campos extras para o vendedor--->
-
+            <!-- campos extras para o vendedor -->
             <div id="campos-vendedor">
                 <label for="banca">Nome da Banca</label>
-                <input type="text" id="banca" name="banca" placeholder="Nome da banca" required>
+                <input type="text" id="banca" name="banca" placeholder="Nome da banca">
 
                 <label for="setor">Setor</label>
-                <input type="text" id="setor" name="setor" placeholder="Setor" required>
+                <input type="text" id="setor" name="setor" placeholder="Setor">
 
                 <label for="bloco">Bloco</label>
-                <input type="text" id="bloco" name="bloco" placeholder="Bloco" required>
+                <input type="text" id="bloco" name="bloco" placeholder="Bloco">
             </div>
-            <div class="opcoes"></div>
-                <a href="#">Esqueci minha senha</a>
-            <div class="opcoes"></div>
-                <a href="#">Criar conta</a>
+
+            <a class="esqueci" href="recuperar_senha.html">Esqueci minha senha</a>
 
             <button type="submit" class="botao">Entrar</button>
-          </form>
-          </main>
-    </section>
 
+            <a class="esqueci" href="cadastrar_estabelecimento.html">Criar conta</a>
+        </form>
 
+        <a class="esqueci" href="../index.html">← Voltar ao início</a>
+    </main>
 </body>
 </html>

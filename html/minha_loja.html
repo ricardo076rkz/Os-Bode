@@ -8,16 +8,19 @@
   <link rel="stylesheet" href="../style/loja.css">
 </head>
 <body>
-  <div class="tela">
+  <main class="tela loja">
 
     <!-- INÍCIO -->
     <section id="inicio" class="secao">
-      <h1>Minha loja</h1>
+      <div class="titulo-linha">
+        <h1>Minha loja</h1>
+        <a class="sair" href="comerciante.html">Sair</a>
+      </div>
 
       <div class="card-loja">
         <h2>Pastelaria</h2>
         <p>Rua Blablabla, nº 10</p>
-        <button type="button" class="link" data-abrir="vitrine">Ver loja →</button>
+        <a href="explorar.html">Ver loja →</a>
       </div>
 
       <div class="resumo">
@@ -40,8 +43,8 @@
     <section id="vitrine" class="secao oculto">
       <h1>Vitrine</h1>
 
-      <form id="form-vitrine">
-        <label for="v-nome">Nome do item</label>
+      <form id="form-vitrine" class="cartao">
+        <label for="v-nome" style="margin-top: 0">Nome do item</label>
         <input type="text" id="v-nome" required>
 
         <label for="v-valor">Valor (R$)</label>
@@ -60,8 +63,8 @@
     <section id="evento" class="secao oculto">
       <h1>Anunciar evento</h1>
 
-      <form id="form-evento">
-        <label for="ev-nome">Nome do evento</label>
+      <form id="form-evento" class="cartao">
+        <label for="ev-nome" style="margin-top: 0">Nome do evento</label>
         <input type="text" id="ev-nome" required>
 
         <div class="dupla">
@@ -145,16 +148,18 @@
       <div id="lista-pedidos"></div>
     </section>
 
-  </div>
+    <!-- MENU DE BAIXO -->
+    <nav class="menu-baixo">
+      <button type="button" class="ativo" data-abrir="inicio"><span>🏠</span>Início</button>
+      <button type="button" data-abrir="vitrine"><span>🛍️</span>Vitrine</button>
+      <button type="button" data-abrir="evento"><span>📣</span>Eventos</button>
+      <button type="button" data-abrir="avaliacoes"><span>⭐</span>Avaliações</button>
+      <button type="button" data-abrir="estatisticas"><span>📊</span>Estatísticas</button>
+    </nav>
 
-  <nav class="menu-baixo">
-    <button type="button" class="ativo" data-abrir="inicio"><span>🏠</span>Início</button>
-    <button type="button" data-abrir="vitrine"><span>🛍️</span>Vitrine</button>
-    <button type="button" data-abrir="evento"><span>📣</span>Eventos</button>
-    <button type="button" data-abrir="avaliacoes"><span>⭐</span>Avaliações</button>
-    <button type="button" data-abrir="estatisticas"><span>📊</span>Estatísticas</button>
-  </nav>
+  </main>
 
+  <script src="../js/comum.js"></script>
   <script src="../js/loja.js"></script>
 </body>
 </html>

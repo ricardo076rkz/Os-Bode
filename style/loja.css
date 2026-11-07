@@ -1,43 +1,48 @@
-.oculto {
-  display: none;
+/* Minha loja - usa as mesmas cores do style.css */
+
+/* a tela vira uma coluna para o menu ficar sempre embaixo */
+.loja {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0;
 }
 
-h1 {
+.loja .secao {
+  padding-bottom: 24px;
+}
+
+.titulo-linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 16px;
 }
 
-h3 {
-  margin: 24px 0 12px;
+.titulo-linha h1 {
+  margin: 0;
 }
 
-.voltar {
-  background: none;
-  border: none;
-  color: var(--amarelo);
-  font-size: 15px;
-  cursor: pointer;
-  margin-bottom: 12px;
+.sair {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--laranja-escuro);
 }
 
 /* início */
 .card-loja {
-  background: var(--card);
-  border: 2px solid var(--vermelho);
-  border-radius: 8px;
+  background: #fff;
+  border: 2px solid var(--laranja);
+  border-radius: 16px;
   padding: 16px;
 }
 
 .card-loja p {
   margin: 4px 0 12px;
-  color: var(--suave);
 }
 
-.link {
-  background: none;
-  border: none;
-  color: var(--amarelo);
-  font-size: 16px;
-  cursor: pointer;
+.card-loja a {
+  font-weight: 700;
+  color: var(--laranja-escuro);
 }
 
 .resumo {
@@ -48,9 +53,9 @@ h3 {
 }
 
 .mini {
-  background: var(--card);
+  background: #fff;
   border: 1px solid var(--borda);
-  border-radius: 6px;
+  border-radius: 12px;
   padding: 10px 4px;
   text-align: center;
 }
@@ -58,12 +63,11 @@ h3 {
 .mini strong {
   display: block;
   font-size: 20px;
-  color: var(--amarelo);
+  color: var(--laranja);
 }
 
 .mini span {
   font-size: 11px;
-  color: var(--suave);
 }
 
 .grade {
@@ -73,17 +77,23 @@ h3 {
 }
 
 .item {
-  background: var(--card);
-  border: 2px solid var(--borda);
-  border-radius: 8px;
   height: 90px;
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: 16px;
   color: var(--texto);
-  font-size: 16px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
 }
 
 .item:hover {
-  border-color: var(--amarelo);
+  border-color: var(--laranja);
+}
+
+.item:active {
+  background: var(--creme);
 }
 
 /* vitrine */
@@ -95,22 +105,23 @@ h3 {
 }
 
 .produto {
-  background: var(--card);
+  background: #fff;
   border: 1px solid var(--borda);
-  border-radius: 8px;
+  border-radius: 16px;
   padding: 10px;
 }
 
 .produto-foto {
   height: 110px;
-  border-radius: 6px;
-  background: var(--vermelho);
+  margin-bottom: 8px;
+  border-radius: 10px;
+  background: var(--creme);
+  color: var(--laranja);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 36px;
-  color: var(--amarelo);
-  margin-bottom: 8px;
+  font-weight: 700;
   overflow: hidden;
 }
 
@@ -120,26 +131,29 @@ h3 {
   object-fit: cover;
 }
 
+.produto h4 {
+  font-size: 0.95rem;
+}
+
 .preco {
-  color: var(--amarelo);
+  color: var(--laranja-escuro);
+  font-weight: 700;
   margin: 4px 0 8px;
 }
 
 .remover {
   width: 100%;
-  padding: 6px;
+  padding: 8px;
   background: transparent;
   border: 1px solid var(--borda);
-  border-radius: 6px;
-  color: var(--suave);
+  border-radius: 8px;
+  color: var(--texto);
+  font-family: inherit;
   cursor: pointer;
 }
 
-.vazio {
-  grid-column: 1 / -1;
-  text-align: center;
-  color: var(--suave);
-  padding: 20px 0;
+.remover:hover {
+  border-color: var(--laranja);
 }
 
 /* eventos */
@@ -148,20 +162,21 @@ h3 {
 }
 
 .evento {
-  background: var(--card);
-  border-left: 4px solid var(--amarelo);
-  border-radius: 6px;
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-left: 4px solid var(--laranja);
+  border-radius: 12px;
   padding: 12px;
   margin-bottom: 12px;
 }
 
 .evento p {
   margin: 4px 0;
-  font-size: 14px;
+  font-size: 0.9rem;
 }
 
-.local {
-  color: var(--suave);
+.evento-quando {
+  font-weight: 700;
 }
 
 .evento .remover {
@@ -170,9 +185,9 @@ h3 {
 
 /* avaliações */
 .media-nota {
-  background: var(--card);
+  background: #fff;
   border: 1px solid var(--borda);
-  border-radius: 8px;
+  border-radius: 16px;
   padding: 16px;
   text-align: center;
 }
@@ -180,21 +195,17 @@ h3 {
 .media-nota strong {
   display: block;
   font-size: 40px;
-  color: var(--amarelo);
+  color: var(--laranja);
 }
 
 .media-nota small {
   display: block;
-  color: var(--suave);
-}
-
-.estrelas {
-  color: var(--amarelo);
 }
 
 .aval {
-  background: var(--card);
-  border-radius: 6px;
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
   padding: 12px;
   margin-top: 12px;
 }
@@ -206,12 +217,8 @@ h3 {
 }
 
 .aval p {
-  font-size: 14px;
+  font-size: 0.9rem;
   margin-bottom: 6px;
-}
-
-.aval small {
-  color: var(--suave);
 }
 
 /* estatísticas */
@@ -222,22 +229,21 @@ h3 {
 }
 
 .kpi {
-  background: var(--card);
+  background: #fff;
   border: 1px solid var(--borda);
-  border-radius: 8px;
+  border-radius: 16px;
   padding: 12px;
 }
 
 .kpi span {
-  font-size: 13px;
-  color: var(--suave);
+  font-size: 0.8rem;
 }
 
 .kpi strong {
   display: block;
-  font-size: 20px;
   margin-top: 6px;
-  color: var(--amarelo);
+  font-size: 1.2rem;
+  color: var(--laranja);
 }
 
 .grafico {
@@ -246,10 +252,10 @@ h3 {
   justify-content: space-between;
   gap: 8px;
   height: 200px;
-  background: var(--card);
-  border: 1px solid var(--borda);
-  border-radius: 8px;
   padding: 12px;
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: 16px;
 }
 
 .coluna {
@@ -260,12 +266,12 @@ h3 {
   justify-content: flex-end;
   gap: 4px;
   font-size: 12px;
-  color: var(--suave);
 }
 
 .barra {
   width: 100%;
-  background: var(--vermelho);
+  background: var(--laranja);
+  border-radius: 6px 6px 0 0;
   transition: height 0.6s;
 }
 
@@ -273,32 +279,25 @@ h3 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--card);
-  border-radius: 6px;
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
   padding: 10px 12px;
   margin-bottom: 8px;
 }
 
 .pedido small {
   display: block;
-  color: var(--suave);
   margin-top: 2px;
 }
 
 /* menu de baixo (igual aos apps) */
-.tela {
-  padding-bottom: 90px;
-}
-
 .menu-baixo {
-  position: fixed;
+  position: sticky;
   bottom: 0;
-  left: 0;
-  right: 0;
-  max-width: 420px;
-  margin: 0 auto;
   display: flex;
-  background: var(--fundo);
+  margin: auto -24px 0;
+  background: #fff;
   border-top: 1px solid var(--borda);
 }
 
@@ -307,17 +306,19 @@ h3 {
   padding: 8px 0;
   background: none;
   border: none;
-  color: var(--suave);
+  color: var(--texto);
+  font-family: inherit;
   font-size: 11px;
   cursor: pointer;
 }
 
 .menu-baixo button span {
   display: block;
-  font-size: 20px;
   margin-bottom: 2px;
+  font-size: 20px;
 }
 
 .menu-baixo button.ativo {
-  color: var(--amarelo);
+  color: var(--laranja);
+  font-weight: 700;
 }
