@@ -326,8 +326,7 @@ def sem_cache(resp):
 # ---------------------------------------------------------------- configuração e conta
 @app.get("/api/config")
 def config():
-    # a chave do Maps no navegador é pública por natureza: restrinja por domínio no Google Cloud
-    return jsonify({"maps_key": os.environ.get("GOOGLE_MAPS_API_KEY", ""), "segmentos": SEGMENTOS})
+    return jsonify({"segmentos": SEGMENTOS})
 
 
 @app.get("/api/eu")

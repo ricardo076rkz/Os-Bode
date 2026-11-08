@@ -8,7 +8,7 @@ Guia de cidade (Caruaru) com área do comerciante. Front em HTML/CSS/JS, servido
    ```
    pip install -r python/requirements.txt
    ```
-2. Copie `.env.exemplo` para `.env` e preencha `GOOGLE_MAPS_API_KEY` (veja abaixo).
+2. Copie `.env.exemplo` para `.env` (não precisa preencher nada).
 3. Inicie o servidor:
    ```
    python python/app.py
@@ -34,11 +34,15 @@ O banco (`python/nordestinando.db`) é criado sozinho na primeira execução.
 | Avaliar loja / reservar item | sim | não |
 | Painel "Minha loja" | não | sim (só da própria loja) |
 
-## Google Maps
+## Mapa (gratuito)
 
-No Google Cloud Console: crie uma chave, ative **Maps JavaScript API** e **Geocoding API**, e restrinja a chave
-por site (`http://localhost:5000/*`). Coloque no `.env`. Sem a chave, o resto do sistema funciona e o mapa mostra um aviso.
-O botão "Como chegar" abre o Google Maps com a rota e não precisa de chave.
+O mapa usa **OpenStreetMap + Leaflet**: não precisa de chave, cadastro nem cartão.
+- Imagens do mapa: OpenStreetMap
+- Endereço -> coordenadas: Nominatim (busca do OpenStreetMap; uso leve, máximo 1 consulta por segundo)
+- CEP -> endereço: ViaCEP
+- "Como chegar": abre o Google Maps com a rota (é só um link, grátis)
+
+O navegador precisa de internet para carregar o mapa. Sem internet, o resto do sistema funciona e o mapa mostra um aviso.
 
 ## Banco
 

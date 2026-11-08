@@ -5,7 +5,6 @@ let usuario = null;
 let lojas = [];
 let segmentoEscolhido = "Todos";
 let mapa = null;
-let janela = null;
 const marcadores = {}; // id da loja -> marcador
 const msg = pegarId("mensagem");
 
@@ -50,36 +49,26 @@ function conteudoJanela(l) {
 function abrirNoMapa(l) {
   const m = marcadores[l.id];
   if (!mapa || !m) return;
-  mapa.panTo(m.getPosition());
-  mapa.setZoom(17);
-  janela.setContent(conteudoJanela(l));
-  janela.open(mapa, m);
+  mapa.setView(m.getLatLng(), 17);
+  m.openPopup();
 }
 
 function desenharMarcadores(lista) {
   if (!mapa) return;
   Object.keys(marcadores).forEach(function (id) {
-    marcadores[id].setMap(null);
+    marcadores[id].remove();
     delete marcadores[id];
   });
-  const limites = new google.maps.LatLngBounds();
+  const pontos = [];
   lista.forEach(function (l) {
-    const marcador = new google.maps.Marker({
-      map: mapa,
-      position: { lat: l.latitude, lng: l.longitude },
-      title: l.nome
-    });
-    marcador.addListener("click", function () {
-      abrirNoMapa(l);
-    });
-    marcadores[l.id] = marcador;
-    limites.extend(marcador.getPosition());
+    // o balão abre ao clicar no marcador
+    marcadores[l.id] = L.marker([l.latitude, l.longitude], { title: l.nome })
+      .addTo(mapa)
+      .bindPopup(conteudoJanela(l));
+    pontos.push([l.latitude, l.longitude]);
   });
-  if (lista.length > 1) mapa.fitBounds(limites, 40);
-  if (lista.length == 1) {
-    mapa.setCenter({ lat: lista[0].latitude, lng: lista[0].longitude });
-    mapa.setZoom(16);
-  }
+  if (pontos.length > 1) mapa.fitBounds(pontos, { padding: [40, 40] });
+  if (pontos.length == 1) mapa.setView(pontos[0], 16);
 }
 
 // ---------- lojas ----------
@@ -282,7 +271,6 @@ pegarId("busca").addEventListener("input", carregarLojas);
   criarMapa(pegarId("mapa"), CARUARU, 14).then(
     function (m) {
       mapa = m;
-      janela = new google.maps.InfoWindow();
       desenharMarcadores(lojas);
     },
     function () {}
