@@ -12,56 +12,140 @@
       <h1>Cadastrar estabelecimento</h1>
     </div>
 
-    <form id="form-cadastro" class="cartao">
-      <p class="subtitulo" style="margin-top: 0">Dados de acesso</p>
+    <div class="passos" id="passos">
+      <span class="passo ativo">1</span><span class="passo">2</span><span class="passo">3</span><span class="passo">4</span>
+    </div>
 
-      <label for="nome">Nome</label>
-      <input type="text" id="nome" name="nome" required>
+    <form id="form-cadastro" class="cartao" novalidate>
 
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required>
+      <!-- ETAPA 1 -->
+      <section class="etapa" data-titulo="Seus dados">
+        <p class="subtitulo" style="margin-top: 0">1 de 4 · Seus dados (responsável)</p>
 
-      <label for="senha">Senha</label>
-      <input type="password" id="senha" name="senha" minlength="6" required>
+        <label for="nome">Nome completo</label>
+        <input type="text" id="nome" name="nome" autocomplete="name" required minlength="3">
 
-      <input type="hidden" name="perfil" value="lojista">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" autocomplete="email" required>
 
-      <p class="subtitulo">Dados do estabelecimento</p>
+        <label for="telefone">Telefone com DDD</label>
+        <input type="tel" id="telefone" name="telefone" placeholder="(81) 99999-9999" required>
 
-      <label for="cnpj">CNPJ</label>
-      <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00"
-             pattern="\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}" title="Digite o CNPJ completo" required>
+        <label for="senha">Senha (mínimo 8, com letras e números)</label>
+        <input type="password" id="senha" name="senha" minlength="8" autocomplete="new-password" required>
 
-      <label for="nome_loja">Nome da loja</label>
-      <input type="text" id="nome_loja" name="nome_loja" required>
+        <label for="confirmar_senha">Confirmar senha</label>
+        <input type="password" id="confirmar_senha" name="confirmar_senha" minlength="8" autocomplete="new-password" required>
+      </section>
 
-      <label for="segmento">Segmento</label>
-      <select id="segmento" name="segmento" required>
-        <option value="">Selecione</option>
-        <option>Alimentação</option>
-        <option>Artesanato</option>
-        <option>Vestuário</option>
-        <option>Serviços</option>
-        <option>Outros</option>
-      </select>
+      <!-- ETAPA 2 -->
+      <section class="etapa oculto" data-titulo="Estabelecimento">
+        <p class="subtitulo" style="margin-top: 0">2 de 4 · O estabelecimento</p>
 
-      <div class="dupla">
-        <div>
-          <label for="latitude">Latitude</label>
-          <input type="number" id="latitude" name="latitude" step="any">
+        <label for="nome_fantasia">Nome fantasia</label>
+        <input type="text" id="nome_fantasia" name="nome_fantasia" required>
+
+        <label for="segmento">Categoria / segmento</label>
+        <select id="segmento" name="segmento" required>
+          <option value="">Selecione</option>
+        </select>
+
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" name="descricao" maxlength="500" minlength="10" required placeholder="O que você vende, diferenciais..."></textarea>
+
+        <label for="cnpj">CNPJ (opcional para quem não tem)</label>
+        <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" inputmode="numeric">
+
+        <label for="razao_social">Razão social (obrigatória se informar o CNPJ)</label>
+        <input type="text" id="razao_social" name="razao_social">
+
+        <label for="telefone_comercial">Telefone comercial</label>
+        <input type="tel" id="telefone_comercial" name="telefone_comercial" placeholder="(81) 3721-0000" required>
+
+        <label for="whatsapp">WhatsApp comercial (opcional)</label>
+        <input type="tel" id="whatsapp" name="whatsapp" placeholder="(81) 99999-9999">
+
+        <label for="instagram">Instagram (opcional)</label>
+        <input type="text" id="instagram" name="instagram" placeholder="@sualoja">
+
+        <label for="site">Site (opcional)</label>
+        <input type="url" id="site" name="site" placeholder="https://">
+
+        <label for="logo">Logotipo (opcional)</label>
+        <input type="file" id="logo" accept="image/*">
+
+        <label for="foto">Foto do estabelecimento (opcional)</label>
+        <input type="file" id="foto" accept="image/*">
+      </section>
+
+      <!-- ETAPA 3 -->
+      <section class="etapa oculto" data-titulo="Endereço">
+        <p class="subtitulo" style="margin-top: 0">3 de 4 · Endereço e localização</p>
+
+        <label for="cep">CEP</label>
+        <input type="text" id="cep" name="cep" placeholder="00000-000" inputmode="numeric" required>
+
+        <label for="rua">Rua</label>
+        <input type="text" id="rua" name="rua" required>
+
+        <div class="dupla">
+          <div>
+            <label for="numero">Número</label>
+            <input type="text" id="numero" name="numero" required>
+          </div>
+          <div>
+            <label for="bairro">Bairro</label>
+            <input type="text" id="bairro" name="bairro" required>
+          </div>
         </div>
-        <div>
-          <label for="longitude">Longitude</label>
-          <input type="number" id="longitude" name="longitude" step="any">
+
+        <div class="dupla">
+          <div>
+            <label for="cidade">Cidade</label>
+            <input type="text" id="cidade" name="cidade" required>
+          </div>
+          <div>
+            <label for="estado">Estado (UF)</label>
+            <input type="text" id="estado" name="estado" maxlength="2" placeholder="PE" required>
+          </div>
         </div>
+
+        <button type="button" id="btn-localizar" class="botao cadastrar">Localizar no mapa</button>
+        <div id="mapa" class="mapa"></div>
+        <p id="aviso-mapa" class="mensagem oculto"></p>
+
+        <div class="dupla">
+          <div>
+            <label for="latitude">Latitude</label>
+            <input type="number" id="latitude" name="latitude" step="any" required>
+          </div>
+          <div>
+            <label for="longitude">Longitude</label>
+            <input type="number" id="longitude" name="longitude" step="any" required>
+          </div>
+        </div>
+      </section>
+
+      <!-- ETAPA 4 -->
+      <section class="etapa oculto" data-titulo="Horários">
+        <p class="subtitulo" style="margin-top: 0">4 de 4 · Horário de funcionamento</p>
+        <div id="horarios" class="horarios"></div>
+        <input type="hidden" name="horarios">
+      </section>
+
+      <p id="mensagem" class="mensagem oculto"></p>
+
+      <div class="navegacao">
+        <button type="button" id="btn-voltar" class="botao cadastrar oculto">Voltar</button>
+        <button type="button" id="btn-proximo" class="botao">Próximo</button>
       </div>
-
-      <button type="button" id="btn-local" class="botao cadastrar">Usar minha localização</button>
-      <button type="submit" class="botao">Cadastrar</button>
       <a class="esqueci" href="comerciante.html">Já tenho conta</a>
     </form>
   </main>
 
+  <script src="../js/comum.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/mapa.js"></script>
   <script src="../js/cadastro.js"></script>
 </body>
 </html>

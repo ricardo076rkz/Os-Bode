@@ -1,0 +1,32 @@
+"""Conexão com o banco (SQLite, biblioteca padrão do Python)."""
+import os
+import sqlite3
+
+from flask import g
+
+PASTA = os.path.dirname(os.path.abspath(__file__))
+CAMINHO_BANCO = os.environ.get("DB_PATH") or os.path.join(PASTA, "nordestinando.db")
+
+
+def conexao():
+    # uma conexão por requisição
+    if "db" not in g:
+        g.db = sqlite3.connect(CAMINHO_BANCO)
+        g.db.row_factory = sqlite3.Row
+        g.db.execute("PRAGMA foreign_keys = ON")
+    return g.db
+
+
+def fechar(erro=None):
+    db = g.pop("db", None)
+    if db is not None:
+        db.close()
+
+
+def criar_tabelas():
+    with open(os.path.join(PASTA, "schema.sql"), encoding="utf-8") as f:
+        script = f.read()
+    con = sqlite3.connect(CAMINHO_BANCO)
+    con.executescript(script)
+    con.commit()
+    con.close()

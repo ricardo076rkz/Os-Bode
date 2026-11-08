@@ -10,20 +10,26 @@
   <main class="tela fundo-estacao">
     <div class="topo">🏪</div>
 
-    <div class="cartao">
+    <form id="form-login" class="cartao">
       <label for="email">Email</label>
-      <input type="email" id="email">
+      <input type="email" id="email" autocomplete="email" required>
 
       <label for="senha">Senha</label>
-      <input type="password" id="senha">
+      <input type="password" id="senha" autocomplete="current-password" required>
+
+      <p id="mensagem" class="mensagem oculto"></p>
 
       <a class="esqueci" href="recuperar_senha.html">Esqueci minha senha</a>
 
-      <a class="botao" href="minha_loja.html">Entrar</a>
+      <button type="submit" class="botao">Entrar</button>
       <a class="botao cadastrar" href="cadastrar_estabelecimento.html">Cadastrar Estabelecimento</a>
-    </div>
+    </form>
 
     <a class="esqueci" href="../index.html">← Voltar ao início</a>
   </main>
+
+  <script src="../js/comum.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/comerciante.js"></script>
 </body>
 </html>

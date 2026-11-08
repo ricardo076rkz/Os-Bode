@@ -1,57 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nordestinando - Entrar</title>
-
-    <link rel="stylesheet" href="../style/style.css">
-    <script src="../js/tela1.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nordestinando - Entrar</title>
+  <link rel="stylesheet" href="../style/style.css">
 </head>
 <body>
-    <main class="tela entrar">
-        <img src="../js/img/logo-original.png" alt="Logo Nordestinando" class="logo">
+  <main class="tela entrar">
+    <img src="../js/img/logo-original.png" alt="Logo Nordestinando" class="logo">
+    <h1>Nordestinando</h1>
 
-        <h1 class="title">Nordestinando</h1>
+    <div class="perfil">
+      <label class="perfil-opcao">
+        <input type="radio" name="perfil" value="CLIENTE" checked>
+        <span>Sou usuário</span>
+      </label>
+      <label class="perfil-opcao">
+        <input type="radio" name="perfil" value="LOGISTA">
+        <span>Sou comerciante</span>
+      </label>
+    </div>
+    <p id="descricao-perfil" class="descricao-perfil"></p>
 
-        <form id="form-login" class="cartao">
-            <div class="perfil">
-                <label class="perfil-opcao">
-                    <input type="radio" name="perfil" value="Cliente" checked>
-                    <span>Consumidor</span>
-                </label>
-                <label class="perfil-opcao">
-                    <input type="radio" name="perfil" value="Vendedor">
-                    <span>Vendedor</span>
-                </label>
-            </div>
+    <!-- ENTRAR (usuário e comerciante) -->
+    <form id="form-login" class="cartao">
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" autocomplete="email" required>
 
-            <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" placeholder="Seu e-mail" required>
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" name="senha" autocomplete="current-password" required>
 
-            <label for="password">Senha</label>
-            <input type="password" id="password" name="password" placeholder="Sua senha" required>
+      <a class="esqueci" href="recuperar_senha.html">Esqueci minha senha</a>
+      <button type="submit" class="botao">Entrar</button>
+    </form>
 
-            <!-- campos extras para o vendedor -->
-            <div id="campos-vendedor">
-                <label for="banca">Nome da Banca</label>
-                <input type="text" id="banca" name="banca" placeholder="Nome da banca">
+    <!-- CRIAR CONTA DE USUÁRIO -->
+    <form id="form-conta" class="cartao oculto">
+      <label for="c-nome">Nome completo</label>
+      <input type="text" id="c-nome" name="nome" autocomplete="name" required>
 
-                <label for="setor">Setor</label>
-                <input type="text" id="setor" name="setor" placeholder="Setor">
+      <label for="c-email">E-mail</label>
+      <input type="email" id="c-email" name="email" autocomplete="email" required>
 
-                <label for="bloco">Bloco</label>
-                <input type="text" id="bloco" name="bloco" placeholder="Bloco">
-            </div>
+      <label for="c-telefone">Telefone com DDD</label>
+      <input type="tel" id="c-telefone" name="telefone" placeholder="(81) 99999-9999" required>
 
-            <a class="esqueci" href="recuperar_senha.html">Esqueci minha senha</a>
+      <label for="c-senha">Senha (mínimo 8, com letras e números)</label>
+      <input type="password" id="c-senha" name="senha" minlength="8" autocomplete="new-password" required>
 
-            <button type="submit" class="botao">Entrar</button>
+      <label for="c-confirmar">Confirmar senha</label>
+      <input type="password" id="c-confirmar" name="confirmar_senha" minlength="8" autocomplete="new-password" required>
 
-            <a class="esqueci" href="cadastrar_estabelecimento.html">Criar conta</a>
-        </form>
+      <button type="submit" class="botao">Criar conta de usuário</button>
+    </form>
 
-        <a class="esqueci" href="../index.html">← Voltar ao início</a>
-    </main>
+    <!-- CRIAR CONTA DE COMERCIANTE (cadastro completo em etapas) -->
+    <div id="criar-comerciante" class="cartao oculto">
+      <p>O cadastro do comerciante tem 4 etapas: seus dados, o estabelecimento, endereço e localização, e horários.</p>
+      <a class="botao" href="cadastrar_estabelecimento.html">Cadastrar meu estabelecimento</a>
+    </div>
+
+    <p id="mensagem" class="mensagem oculto"></p>
+
+    <button type="button" id="trocar-modo" class="esqueci link-botao"></button>
+    <a class="esqueci" href="../index.html">← Voltar ao início</a>
+  </main>
+
+  <script src="../js/comum.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/tela1.js"></script>
 </body>
 </html>

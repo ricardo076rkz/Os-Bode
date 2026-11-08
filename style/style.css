@@ -418,3 +418,202 @@ textarea {
 .item-vitrine strong {
   color: var(--laranja-escuro);
 }
+
+/* ---------- mensagens, erros e mapa ---------- */
+.mensagem {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.mensagem.erro {
+  background: #fde8e0;
+  color: #9a2a05;
+}
+
+.mensagem.ok,
+.mensagem.info {
+  background: var(--creme);
+  color: var(--texto);
+}
+
+.erro-campo {
+  display: block;
+  margin-top: 4px;
+  color: #b3360b;
+  font-size: 0.78rem;
+}
+
+.mapa {
+  height: 220px;
+  margin-top: 12px;
+  border-radius: 14px;
+  border: 1px solid var(--borda);
+  background: var(--creme);
+  overflow: hidden;
+}
+
+.mapa-erro {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+/* perfil: texto embaixo das abas e botão que parece link */
+.descricao-perfil {
+  font-size: 0.85rem;
+  margin: 4px 4px 14px;
+}
+
+.link-botao {
+  width: 100%;
+  background: none;
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* cadastro em etapas */
+.passos {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.passo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--borda);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.passo.ativo {
+  background: var(--laranja);
+  border-color: var(--laranja);
+  color: #fff;
+}
+
+.passo.feito {
+  border-color: var(--laranja);
+  color: var(--laranja-escuro);
+}
+
+.navegacao {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.navegacao .oculto + .botao {
+  grid-column: 1 / -1;
+}
+
+.horario-linha {
+  display: grid;
+  grid-template-columns: 62px 1fr 1fr auto;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+}
+
+.horario-linha input[type="time"] {
+  padding: 8px 6px;
+  font-size: 0.85rem;
+}
+
+.horario-fechado {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.horario-fechado input {
+  width: auto;
+}
+
+/* explorar: mapa, botões pequenos, balão do mapa */
+.mapa-grande {
+  height: 240px;
+  margin: 0 0 14px;
+}
+
+.clicavel {
+  cursor: pointer;
+}
+
+.acoes {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.mini-botao {
+  display: inline-block;
+  padding: 7px 12px;
+  border: 1px solid var(--laranja);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--laranja-escuro);
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.mini-botao:hover {
+  background: var(--creme);
+}
+
+.avaliar {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.avaliar select,
+.avaliar input {
+  padding: 8px;
+  font-size: 0.85rem;
+}
+
+.avaliar .botao {
+  grid-column: 1 / -1;
+  min-height: 38px;
+  margin-top: 0;
+  padding: 8px;
+  font-size: 0.85rem;
+}
+
+.detalhe-conta {
+  font-size: 0.85rem;
+}
+
+.balao {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 13px;
+  color: #7c2d12;
+  line-height: 1.4;
+}
+
+.balao a {
+  display: inline-block;
+  margin-top: 6px;
+  color: #c2410c;
+  font-weight: 700;
+}

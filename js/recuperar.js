@@ -1,5 +1,5 @@
 // Recuperar senha - Nordestinando
-// Tela visual: ainda não envia email de verdade
+// O envio de e-mail ainda não existe: a tela avisa isso, em vez de fingir que enviou
 
 document.getElementById("form-recuperar").addEventListener("submit", function (e) {
   e.preventDefault();
