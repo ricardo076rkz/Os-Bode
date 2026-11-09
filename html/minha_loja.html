@@ -9,18 +9,22 @@
 </head>
 <body>
   <main class="tela loja">
+    <div class="bandeirinhas"></div>
 
     <!-- INÍCIO -->
     <section id="inicio" class="secao">
       <div class="titulo-linha">
         <h1>Minha loja</h1>
-        <a class="sair" href="comerciante.html" id="sair">Sair</a>
+        <a class="sair" href="comerciante.html" id="sair"><i data-icone="sair"></i>Sair</a>
       </div>
 
-      <div class="card-loja">
-        <h2 id="loja-nome">…</h2>
-        <p id="loja-endereco"></p>
-        <a href="explorar.html">Ver no mapa →</a>
+      <div class="card card-loja com-avatar">
+        <div class="capa" id="loja-capa"></div>
+        <div class="card-corpo">
+          <h2 id="loja-nome">…</h2>
+          <p id="loja-endereco"></p>
+          <a href="explorar.html"><i data-icone="pino"></i>Ver no mapa</a>
+        </div>
       </div>
 
       <div class="resumo">
@@ -32,11 +36,11 @@
 
       <h3>Gerenciar</h3>
       <div class="grade">
-        <button type="button" class="item" data-abrir="vitrine">Vitrine</button>
-        <button type="button" class="item" data-abrir="evento">Anunciar evento</button>
-        <button type="button" class="item" data-abrir="avaliacoes">Avaliações</button>
-        <button type="button" class="item" data-abrir="estatisticas">Estatísticas</button>
-        <button type="button" class="item item-largo" data-abrir="dados">Dados e localização da loja</button>
+        <button type="button" class="item" data-abrir="vitrine"><span class="icone-caixa"><i data-icone="sacola"></i></span>Vitrine</button>
+        <button type="button" class="item" data-abrir="evento"><span class="icone-caixa"><i data-icone="calendario"></i></span>Anunciar evento</button>
+        <button type="button" class="item" data-abrir="avaliacoes"><span class="icone-caixa"><i data-icone="estrela"></i></span>Avaliações</button>
+        <button type="button" class="item" data-abrir="estatisticas"><span class="icone-caixa"><i data-icone="grafico"></i></span>Estatísticas</button>
+        <button type="button" class="item item-largo" data-abrir="dados"><span class="icone-caixa"><i data-icone="lapis"></i></span>Dados e localização da loja</button>
       </div>
     </section>
 
@@ -245,15 +249,16 @@
 
     <!-- MENU DE BAIXO -->
     <nav class="menu-baixo">
-      <button type="button" class="ativo" data-abrir="inicio"><span>🏠</span>Início</button>
-      <button type="button" data-abrir="vitrine"><span>🛍️</span>Vitrine</button>
-      <button type="button" data-abrir="evento"><span>📣</span>Eventos</button>
-      <button type="button" data-abrir="avaliacoes"><span>⭐</span>Avaliações</button>
-      <button type="button" data-abrir="estatisticas"><span>📊</span>Estatísticas</button>
+      <button type="button" class="ativo" data-abrir="inicio"><i data-icone="casa"></i>Início</button>
+      <button type="button" data-abrir="vitrine"><i data-icone="sacola"></i>Vitrine</button>
+      <button type="button" data-abrir="evento"><i data-icone="calendario"></i>Eventos</button>
+      <button type="button" data-abrir="avaliacoes"><i data-icone="estrela"></i>Avaliações</button>
+      <button type="button" data-abrir="estatisticas"><i data-icone="grafico"></i>Estatísticas</button>
     </nav>
 
   </main>
 
+  <script src="../js/icones.js"></script>
   <script src="../js/comum.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/mapa.js"></script>

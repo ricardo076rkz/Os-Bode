@@ -41,6 +41,7 @@ O mapa usa **OpenStreetMap + Leaflet**: não precisa de chave, cadastro nem cart
 - Endereço -> coordenadas: Nominatim (busca do OpenStreetMap; uso leve, máximo 1 consulta por segundo)
 - CEP -> endereço: ViaCEP
 - "Como chegar": abre o Google Maps com a rota (é só um link, grátis)
+- Clima de Caruaru no Explorar: Open-Meteo (gratuito, sem chave)
 
 O navegador precisa de internet para carregar o mapa. Sem internet, o resto do sistema funciona e o mapa mostra um aviso.
 

@@ -8,15 +8,27 @@
 </head>
 <body>
   <main class="tela">
-    <div class="barra-topo">
-      <h1>Explorar cidade</h1>
+    <div class="bandeirinhas"></div>
+    <header class="app-topo">
+      <div class="marca">
+        <img class="logo" src="../js/img/logo-original.png" alt="">
+        <span>Nordestinando</span>
+      </div>
       <span id="conta"></span>
+    </header>
+
+    <div class="saudacao">
+      <h1>Explorar Caruaru</h1>
+      <p id="clima" class="clima oculto"></p>
     </div>
 
-    <div id="mapa" class="mapa mapa-grande"></div>
-
-    <input type="search" id="busca" placeholder="Buscar loja">
+    <div class="busca">
+      <i data-icone="busca"></i>
+      <input type="search" id="busca" placeholder="Buscar loja" aria-label="Buscar loja">
+    </div>
     <div class="chips" id="chips"></div>
+
+    <div id="mapa" class="mapa mapa-grande"></div>
 
     <h3>Lojas</h3>
     <div id="lista-lojas"></div>
@@ -33,6 +45,7 @@
     <a class="botao cadastrar" href="../index.html">Voltar ao início</a>
   </main>
 
+  <script src="../js/icones.js"></script>
   <script src="../js/comum.js"></script>
   <script src="../js/api.js"></script>
   <script src="../js/mapa.js"></script>

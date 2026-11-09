@@ -132,28 +132,68 @@ function formularioAvaliar(l) {
   return form;
 }
 
+function montarCapa(l) {
+  const capa = criar("div", "capa");
+  if (l.foto) {
+    const img = document.createElement("img");
+    img.className = "capa-foto";
+    img.src = l.foto;
+    img.alt = "";
+    capa.appendChild(img);
+  } else {
+    capa.appendChild(criar("div", "capa-inicial", inicial(l.nome)));
+  }
+  if (l.logo) {
+    const logo = document.createElement("img");
+    logo.className = "avatar";
+    logo.src = l.logo;
+    logo.alt = "";
+    capa.appendChild(logo);
+  } else {
+    capa.appendChild(criar("div", "avatar", inicial(l.nome)));
+  }
+  return capa;
+}
+
 function mostrarLojas() {
   const lista = pegarId("lista-lojas");
   lista.innerHTML = "";
 
   if (lojas.length == 0) {
-    lista.appendChild(criar("p", "vazio", "Nenhuma loja cadastrada por aqui ainda."));
+    lista.appendChild(criar("p", "vazio", "Nenhuma loja encontrada. Quando um comerciante se cadastrar, ela aparece aqui."));
     return;
   }
 
   lojas.forEach(function (l) {
-    const card = criar("div", "card");
+    const card = criar("div", "card com-avatar");
+    card.appendChild(montarCapa(l));
+
+    const corpo = criar("div", "card-corpo");
+
+    const cabeca = criar("div", "cabeca-loja");
+    const nomes = criar("div");
     const titulo = criar("h4", "clicavel", l.nome);
     titulo.addEventListener("click", function () {
       abrirNoMapa(l);
       pegarId("mapa").scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
-    card.appendChild(titulo);
-    card.appendChild(criar("p", "detalhe", l.segmento + " · ★ " + notaFormatada(l.nota) + " (" + l.total_avaliacoes + ")"));
-    card.appendChild(criar("p", "detalhe", l.endereco));
-    card.appendChild(criar("p", "", l.descricao));
-    const hoje = horarioHoje(l.horarios);
-    if (hoje) card.appendChild(criar("p", "detalhe", hoje));
+    nomes.appendChild(titulo);
+    nomes.appendChild(criar("p", "detalhe", l.segmento));
+    cabeca.appendChild(nomes);
+
+    const nota = criar("span", "nota");
+    nota.appendChild(icone("estrela"));
+    nota.appendChild(document.createTextNode(l.nota === null ? "Novo" : notaFormatada(l.nota) + " (" + l.total_avaliacoes + ")"));
+    cabeca.appendChild(nota);
+    corpo.appendChild(cabeca);
+
+    corpo.appendChild(criar("p", "", l.descricao));
+
+    const selos = criar("div", "selos");
+    const status = abertoAgora(l.horarios);
+    if (status) selos.appendChild(criar("span", "selo " + (status.aberto ? "aberto" : "fechado"), status.texto));
+    selos.appendChild(criar("span", "selo", l.endereco));
+    corpo.appendChild(selos);
 
     l.itens.forEach(function (item) {
       const linha = criar("div", "item-vitrine");
@@ -179,30 +219,39 @@ function mostrarLojas() {
         });
         linha.appendChild(reservar);
       }
-      card.appendChild(linha);
+      corpo.appendChild(linha);
     });
 
     const acoes = criar("div", "acoes");
     const rota = criar("a", "mini-botao", "Como chegar");
+    rota.prepend(icone("rota"));
     rota.href = linkRota(l.latitude, l.longitude);
     rota.target = "_blank";
     rota.rel = "noopener";
     acoes.appendChild(rota);
     if (l.whatsapp) {
       const zap = criar("a", "mini-botao", "WhatsApp");
+      zap.prepend(icone("conversa"));
       zap.href = "https://wa.me/55" + l.whatsapp;
       zap.target = "_blank";
       zap.rel = "noopener";
       acoes.appendChild(zap);
     }
-    card.appendChild(acoes);
+    if (l.telefone) {
+      const ligar = criar("a", "mini-botao", "Ligar");
+      ligar.prepend(icone("telefone"));
+      ligar.href = "tel:" + l.telefone;
+      acoes.appendChild(ligar);
+    }
+    corpo.appendChild(acoes);
 
-    if (usuario && usuario.perfil == "CLIENTE") card.appendChild(formularioAvaliar(l));
+    if (usuario && usuario.perfil == "CLIENTE") corpo.appendChild(formularioAvaliar(l));
+    card.appendChild(corpo);
     lista.appendChild(card);
   });
 
   if (!usuario) {
-    lista.appendChild(criar("p", "detalhe", "Entre como usuário para avaliar e reservar itens."));
+    lista.appendChild(criar("p", "vazio", "Entre como usuário para avaliar lojas e reservar itens."));
   }
 }
 
@@ -212,23 +261,68 @@ async function mostrarEventos() {
   const lista = pegarId("lista-eventos");
   lista.innerHTML = "";
   if (dados.eventos.length == 0) {
-    lista.appendChild(criar("p", "vazio", "Nenhum evento anunciado."));
+    lista.appendChild(criar("p", "vazio", "Nenhum evento anunciado por enquanto."));
     return;
   }
   dados.eventos.forEach(function (ev) {
-    const card = criar("div", "card");
-    card.appendChild(criar("h4", "", ev.nome));
-    card.appendChild(criar("p", "detalhe", ev.dia + " às " + ev.horario + " · " + ev.loja));
-    if (ev.descricao) card.appendChild(criar("p", "", ev.descricao));
+    const card = criar("div", "card evento-card");
+
+    const dia = criar("div", "evento-dia");
+    dia.appendChild(criar("strong", "", ev.dia.slice(0, 3)));
+    dia.appendChild(criar("small", "", ev.horario));
+    card.appendChild(dia);
+
+    const texto = criar("div");
+    texto.appendChild(criar("h4", "", ev.nome));
+    texto.appendChild(criar("p", "detalhe", ev.dia + " às " + ev.horario + " · " + ev.loja));
+    if (ev.descricao) texto.appendChild(criar("p", "", ev.descricao));
     if (ev.latitude !== null) {
+      const acoes = criar("div", "acoes");
       const rota = criar("a", "mini-botao", "Como chegar");
+      rota.prepend(icone("rota"));
       rota.href = linkRota(ev.latitude, ev.longitude);
       rota.target = "_blank";
       rota.rel = "noopener";
-      card.appendChild(rota);
+      acoes.appendChild(rota);
+      texto.appendChild(acoes);
     }
+    card.appendChild(texto);
     lista.appendChild(card);
   });
+}
+
+// ---------- clima de Caruaru (Open-Meteo: gratuito, sem chave) ----------
+const CLIMA = [
+  [[0], "Céu limpo", "sol"],
+  [[1, 2], "Poucas nuvens", "sol"],
+  [[3, 45, 48], "Nublado", "nuvem"],
+  [[51, 53, 55, 56, 57], "Garoa", "chuva"],
+  [[61, 63, 65, 66, 67, 80, 81, 82], "Chuva", "chuva"],
+  [[95, 96, 99], "Trovoadas", "chuva"]
+];
+
+async function mostrarClima() {
+  const area = pegarId("clima");
+  try {
+    const url = "https://api.open-meteo.com/v1/forecast?latitude=" + CARUARU.lat + "&longitude=" + CARUARU.lng +
+      "&current=temperature_2m,weather_code&timezone=America%2FSao_Paulo";
+    const resposta = await fetch(url);
+    if (!resposta.ok) throw new Error("clima");
+    const dados = await resposta.json();
+    const temperatura = Math.round(dados.current.temperature_2m);
+    const codigo = dados.current.weather_code;
+    const achou = CLIMA.find(function (c) {
+      return c[0].indexOf(codigo) != -1;
+    }) || [[], "Tempo variável", "nuvem"];
+
+    area.innerHTML = "";
+    area.appendChild(icone(achou[2]));
+    area.appendChild(document.createTextNode(temperatura + "°C agora em Caruaru · " + achou[1]));
+    area.classList.remove("oculto");
+  } catch (erro) {
+    // sem clima não atrapalha nada: o aviso simplesmente não aparece
+    area.classList.add("oculto");
+  }
 }
 
 // ---------- minhas reservas (só usuário) ----------
@@ -263,6 +357,7 @@ pegarId("busca").addEventListener("input", carregarLojas);
     await carregarLojas();
     mostrarEventos();
     mostrarPedidos();
+    mostrarClima();
   } catch (erro) {
     mostrarMensagem(msg, erro.erro || "Erro ao carregar.", "erro");
   }

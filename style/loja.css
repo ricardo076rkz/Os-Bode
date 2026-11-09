@@ -1,4 +1,4 @@
-/* Minha loja - usa as mesmas cores do style.css */
+/* Minha loja (painel do comerciante) - mesmas cores e fontes do style.css */
 
 /* a tela vira uma coluna para o menu ficar sempre embaixo */
 .loja {
@@ -8,6 +8,7 @@
 }
 
 .loja .secao {
+  flex: none;
   padding-bottom: 24px;
 }
 
@@ -15,85 +16,143 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  margin: 16px 0 14px;
 }
 
 .titulo-linha h1 {
   margin: 0;
 }
 
+.loja .secao > h1 {
+  margin-top: 18px;
+}
+
 .sair {
-  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1.5px solid var(--linha);
+  border-radius: 999px;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: var(--laranja-escuro);
+  color: var(--barro);
+  background: var(--branco);
+}
+
+.sair [data-icone] {
+  width: 16px;
+  height: 16px;
 }
 
 /* início */
 .card-loja {
-  background: #fff;
-  border: 2px solid var(--laranja);
-  border-radius: 16px;
-  padding: 16px;
+  margin-bottom: 0;
+}
+
+.card-loja h2 {
+  font-size: 1.2rem;
 }
 
 .card-loja p {
-  margin: 4px 0 12px;
+  color: var(--suave);
 }
 
 .card-loja a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
   font-weight: 700;
-  color: var(--laranja-escuro);
+  font-size: 0.9rem;
+  color: var(--barro);
+}
+
+.card-loja a [data-icone] {
+  width: 16px;
+  height: 16px;
 }
 
 .resumo {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 14px;
 }
 
 .mini {
-  background: #fff;
-  border: 1px solid var(--borda);
-  border-radius: 12px;
-  padding: 10px 4px;
+  background: var(--branco);
+  border: 1.5px solid var(--linha);
+  border-radius: var(--raio);
+  padding: 12px 4px 10px;
   text-align: center;
 }
 
 .mini strong {
   display: block;
-  font-size: 20px;
-  color: var(--laranja);
+  font-family: var(--fonte-titulo);
+  font-weight: 400;
+  font-size: 1.35rem;
+  color: var(--barro);
 }
 
 .mini span {
-  font-size: 11px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--suave);
 }
 
 .grade {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 .item {
-  height: 90px;
-  background: #fff;
-  border: 1px solid var(--borda);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 92px;
+  padding: 14px;
+  text-align: left;
+  background: var(--branco);
+  border: 1.5px solid var(--linha);
   border-radius: 16px;
-  color: var(--texto);
+  color: var(--tinta);
   font-family: inherit;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.item .icone-caixa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--barro-claro);
+  color: var(--barro);
 }
 
 .item:hover {
-  border-color: var(--laranja);
+  border-color: var(--barro);
 }
 
 .item:active {
-  background: var(--creme);
+  background: var(--barro-claro);
+}
+
+.item-largo {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 64px;
 }
 
 /* vitrine */
@@ -101,27 +160,27 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: 22px;
 }
 
 .produto {
-  background: #fff;
-  border: 1px solid var(--borda);
+  background: var(--branco);
+  border: 1.5px solid var(--linha);
   border-radius: 16px;
   padding: 10px;
 }
 
 .produto-foto {
-  height: 110px;
-  margin-bottom: 8px;
+  height: 112px;
+  margin-bottom: 10px;
   border-radius: 10px;
-  background: var(--creme);
-  color: var(--laranja);
+  background: linear-gradient(135deg, var(--barro), var(--barro-escuro));
+  color: rgba(255, 255, 255, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 36px;
-  font-weight: 700;
+  font-family: var(--fonte-titulo);
+  font-size: 2.4rem;
   overflow: hidden;
 }
 
@@ -136,37 +195,40 @@
 }
 
 .preco {
-  color: var(--laranja-escuro);
+  color: var(--barro);
   font-weight: 700;
-  margin: 4px 0 8px;
+  margin: 4px 0 10px;
 }
 
 .remover {
   width: 100%;
   padding: 8px;
   background: transparent;
-  border: 1px solid var(--borda);
-  border-radius: 8px;
-  color: var(--texto);
+  border: 1.5px solid var(--linha);
+  border-radius: 10px;
+  color: var(--suave);
   font-family: inherit;
+  font-weight: 600;
+  font-size: 0.85rem;
   cursor: pointer;
 }
 
 .remover:hover {
-  border-color: var(--laranja);
+  border-color: var(--barro);
+  color: var(--barro);
 }
 
 /* eventos */
 #lista-eventos {
-  margin-top: 24px;
+  margin-top: 22px;
 }
 
 .evento {
-  background: #fff;
-  border: 1px solid var(--borda);
-  border-left: 4px solid var(--laranja);
-  border-radius: 12px;
-  padding: 12px;
+  background: var(--branco);
+  border: 1.5px solid var(--linha);
+  border-left: 6px solid var(--sol);
+  border-radius: 14px;
+  padding: 12px 14px;
   margin-bottom: 12px;
 }
 
@@ -177,6 +239,12 @@
 
 .evento-quando {
   font-weight: 700;
+  color: var(--barro);
+}
+
+.evento .local {
+  color: var(--suave);
+  font-size: 0.82rem;
 }
 
 .evento .remover {
@@ -185,28 +253,33 @@
 
 /* avaliações */
 .media-nota {
-  background: #fff;
-  border: 1px solid var(--borda);
-  border-radius: 16px;
-  padding: 16px;
+  background: var(--branco);
+  border: 1.5px solid var(--linha);
+  border-radius: 18px;
+  padding: 18px;
   text-align: center;
 }
 
 .media-nota strong {
   display: block;
-  font-size: 40px;
-  color: var(--laranja);
+  font-family: var(--fonte-titulo);
+  font-weight: 400;
+  font-size: 3rem;
+  line-height: 1.1;
+  color: var(--barro);
 }
 
 .media-nota small {
   display: block;
+  margin-top: 2px;
+  color: var(--suave);
 }
 
 .aval {
-  background: #fff;
-  border: 1px solid var(--borda);
-  border-radius: 12px;
-  padding: 12px;
+  background: var(--branco);
+  border: 1.5px solid var(--linha);
+  border-radius: 14px;
+  padding: 12px 14px;
   margin-top: 12px;
 }
 
@@ -217,33 +290,41 @@
 }
 
 .aval p {
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   margin-bottom: 6px;
+}
+
+.aval small {
+  color: var(--suave);
 }
 
 /* estatísticas */
 .kpis {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
 .kpi {
-  background: #fff;
-  border: 1px solid var(--borda);
+  background: var(--branco);
+  border: 1.5px solid var(--linha);
   border-radius: 16px;
-  padding: 12px;
+  padding: 14px;
 }
 
 .kpi span {
   font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--suave);
 }
 
 .kpi strong {
   display: block;
   margin-top: 6px;
-  font-size: 1.2rem;
-  color: var(--laranja);
+  font-family: var(--fonte-titulo);
+  font-weight: 400;
+  font-size: 1.4rem;
+  color: var(--barro);
 }
 
 .grafico {
@@ -253,8 +334,8 @@
   gap: 8px;
   height: 200px;
   padding: 12px;
-  background: #fff;
-  border: 1px solid var(--borda);
+  background: var(--branco);
+  border: 1.5px solid var(--linha);
   border-radius: 16px;
 }
 
@@ -265,30 +346,16 @@
   align-items: center;
   justify-content: flex-end;
   gap: 4px;
-  font-size: 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--suave);
 }
 
 .barra {
   width: 100%;
-  background: var(--laranja);
+  background: var(--sol);
   border-radius: 6px 6px 0 0;
   transition: height 0.6s;
-}
-
-.pedido {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #fff;
-  border: 1px solid var(--borda);
-  border-radius: 12px;
-  padding: 10px 12px;
-  margin-bottom: 8px;
-}
-
-.pedido small {
-  display: block;
-  margin-top: 2px;
 }
 
 /* menu de baixo (igual aos apps) */
@@ -296,34 +363,34 @@
   position: sticky;
   bottom: 0;
   display: flex;
-  margin: auto -24px 0;
-  background: #fff;
-  border-top: 1px solid var(--borda);
+  margin: auto -20px 0;
+  background: var(--branco);
+  border-top: 1.5px solid var(--linha);
 }
 
 .menu-baixo button {
   flex: 1;
-  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 0 12px;
   background: none;
   border: none;
-  color: var(--texto);
+  color: var(--suave);
   font-family: inherit;
-  font-size: 11px;
+  font-size: 0.68rem;
+  font-weight: 600;
   cursor: pointer;
 }
 
-.menu-baixo button span {
-  display: block;
-  margin-bottom: 2px;
-  font-size: 20px;
+.menu-baixo button [data-icone] {
+  width: 22px;
+  height: 22px;
 }
 
 .menu-baixo button.ativo {
-  color: var(--laranja);
+  color: var(--barro);
   font-weight: 700;
-}
-
-.item-largo {
-  grid-column: 1 / -1;
-  height: 64px;
+  box-shadow: inset 0 3px 0 var(--sol);
 }

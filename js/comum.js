@@ -125,3 +125,24 @@ function horarioHoje(horarios) {
   if (!h) return "";
   return h.fechado ? "Hoje: fechado" : "Hoje: " + h.abre + "–" + h.fecha;
 }
+
+// a loja está aberta agora? {aberto, texto} (ou null se não houver horário)
+function abertoAgora(horarios) {
+  const dias = ["dom", "seg", "ter", "qua", "qui", "sex", "sab"];
+  const agora = new Date();
+  const h = horarios && horarios[dias[agora.getDay()]];
+  if (!h) return null;
+  if (h.fechado) return { aberto: false, texto: "Fechado hoje" };
+
+  const minutos = agora.getHours() * 60 + agora.getMinutes();
+  const abre = h.abre.split(":").map(Number);
+  const fecha = h.fecha.split(":").map(Number);
+  if (minutos < abre[0] * 60 + abre[1]) return { aberto: false, texto: "Abre às " + h.abre };
+  if (minutos >= fecha[0] * 60 + fecha[1]) return { aberto: false, texto: "Fechou às " + h.fecha };
+  return { aberto: true, texto: "Aberto até " + h.fecha };
+}
+
+// primeira letra do nome, para quando a loja não tem foto
+function inicial(nome) {
+  return String(nome || "?").trim().charAt(0).toUpperCase();
+}

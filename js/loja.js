@@ -30,6 +30,31 @@ async function carregarLoja() {
   }
   pegarId("loja-nome").textContent = loja.nome;
   pegarId("loja-endereco").textContent = loja.endereco;
+  desenharCapa();
+}
+
+// foto de capa e logotipo da loja (ou a inicial, se ainda não enviou)
+function desenharCapa() {
+  const capa = pegarId("loja-capa");
+  capa.innerHTML = "";
+  if (loja.foto) {
+    const img = document.createElement("img");
+    img.className = "capa-foto";
+    img.src = loja.foto;
+    img.alt = "";
+    capa.appendChild(img);
+  } else {
+    capa.appendChild(criar("div", "capa-inicial", inicial(loja.nome)));
+  }
+  if (loja.logo) {
+    const logo = document.createElement("img");
+    logo.className = "avatar";
+    logo.src = loja.logo;
+    logo.alt = "";
+    capa.appendChild(logo);
+  } else {
+    capa.appendChild(criar("div", "avatar", inicial(loja.nome)));
+  }
 }
 
 // ---------- trocar de seção ----------
