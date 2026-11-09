@@ -285,7 +285,7 @@ textarea:focus {
 
 input::placeholder,
 textarea::placeholder {
-  color: #8c7867;
+  color: #806b5b;
 }
 
 input[type="file"] {
