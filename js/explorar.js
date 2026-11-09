@@ -13,15 +13,7 @@ function mostrarConta() {
   const area = pegarId("conta");
   area.innerHTML = "";
   if (usuario) {
-    area.appendChild(criar("span", "detalhe-conta", usuario.nome.split(" ")[0] + " · "));
-    const sair = criar("a", "link-topo", "Sair");
-    sair.href = "#";
-    sair.addEventListener("click", async function (e) {
-      e.preventDefault();
-      await api("POST", "/api/logout");
-      window.location.reload();
-    });
-    area.appendChild(sair);
+    montarAcoesTopo(area, usuario);
   } else {
     const entrar = criar("a", "link-topo", "Entrar");
     entrar.href = "tela.html";

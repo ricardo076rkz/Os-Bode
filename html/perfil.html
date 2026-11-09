@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meu perfil - Nordestinando</title>
+  <script src="../js/tema.js"></script>
+  <link rel="stylesheet" href="../style/style.css">
+</head>
+<body>
+  <main class="tela pagina-conta">
+    <div class="bandeirinhas"></div>
+    <div class="cabeca">
+      <a class="voltar-link" href="#" id="voltar" aria-label="Voltar"><i data-icone="voltar"></i></a>
+      <h1>Meu perfil</h1>
+      <a class="voltar-link" href="notificacoes.html" aria-label="Notificações"><i data-icone="sino"></i></a>
+      <a class="voltar-link" href="configuracoes.html" aria-label="Configurações"><i data-icone="engrenagem"></i></a>
+    </div>
+
+    <div id="carregando"><div class="esqueleto alto"></div><div class="esqueleto"></div></div>
+
+    <div id="conteudo" class="oculto">
+      <div class="perfil-topo">
+        <div class="foto-perfil" id="foto" role="img" aria-label="Foto de perfil"></div>
+        <div>
+          <div class="nome" id="nome-topo"></div>
+          <div class="sub" id="email-topo"></div>
+          <span class="etiqueta" id="etiqueta"></span>
+        </div>
+      </div>
+      <div class="botoes-linha">
+        <button type="button" class="botao contorno" id="trocar-foto"><i data-icone="camera"></i>Alterar foto</button>
+        <button type="button" class="botao contorno oculto" id="remover-foto"><i data-icone="lixeira"></i>Remover foto</button>
+      </div>
+      <input type="file" id="arquivo-foto" accept="image/jpeg,image/png,image/webp" class="oculto" aria-label="Escolher foto">
+
+      <div class="estatistica-linha" id="resumo"></div>
+
+      <div class="abas" role="tablist">
+        <button class="aba" role="tab" data-aba="dados" aria-selected="true">Dados</button>
+        <button class="aba" role="tab" data-aba="senha" aria-selected="false">Senha</button>
+        <button class="aba" role="tab" data-aba="atividade" aria-selected="false">Atividade</button>
+      </div>
+
+      <section id="aba-dados" class="cartao">
+        <form id="form-dados" novalidate>
+          <label for="nome">Nome completo</label>
+          <input id="nome" name="nome" autocomplete="name" required maxlength="100">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" autocomplete="email" required maxlength="150">
+          <label for="telefone">Telefone</label>
+          <input id="telefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel" required>
+          <label for="senha_atual">Senha atual <small>(só se for trocar o e-mail)</small></label>
+          <input id="senha_atual" name="senha_atual" type="password" autocomplete="current-password">
+          <div class="dado-linha" style="margin-top:12px"><span>Conta criada em</span><span id="criado"></span></div>
+          <button class="botao" type="submit">Salvar alterações</button>
+        </form>
+      </section>
+
+      <section id="aba-senha" class="cartao oculto">
+        <form id="form-senha" novalidate>
+          <label for="s-atual">Senha atual</label>
+          <input id="s-atual" name="senha_atual" type="password" autocomplete="current-password" required>
+          <label for="s-nova">Nova senha</label>
+          <input id="s-nova" name="senha" type="password" autocomplete="new-password" required>
+          <small class="dica">Mínimo de 8 caracteres, com letras e números.</small>
+          <label for="s-conf">Repita a nova senha</label>
+          <input id="s-conf" name="confirmar_senha" type="password" autocomplete="new-password" required>
+          <button class="botao" type="submit">Alterar senha</button>
+        </form>
+      </section>
+
+      <section id="aba-atividade" class="cartao oculto">
+        <h3>Últimas atividades</h3>
+        <div id="atividades"></div>
+      </section>
+
+      <p id="mensagem" class="mensagem oculto" role="status"></p>
+      <button type="button" class="botao perigo-contorno" id="sair"><i data-icone="sair"></i>Sair da conta</button>
+    </div>
+  </main>
+  <script src="../js/icones.js"></script>
+  <script src="../js/comum.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/conta-ui.js"></script>
+  <script src="../js/perfil.js"></script>
+</body>
+</html>

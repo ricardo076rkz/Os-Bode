@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações - Nordestinando</title>
+  <script src="../js/tema.js"></script>
+  <link rel="stylesheet" href="../style/style.css">
+</head>
+<body>
+  <main class="tela pagina-conta">
+    <div class="bandeirinhas"></div>
+    <div class="cabeca">
+      <a class="voltar-link" href="perfil.html" aria-label="Voltar ao perfil"><i data-icone="voltar"></i></a>
+      <h1>Configurações</h1>
+    </div>
+
+    <div id="carregando"><div class="esqueleto alto"></div><div class="esqueleto"></div></div>
+    <p id="mensagem" class="mensagem oculto" role="status"></p>
+
+    <div id="conteudo" class="oculto">
+      <h2>Aparência</h2>
+      <fieldset class="cartao" style="border:1.5px solid var(--linha)">
+        <legend class="dica" style="padding:0 6px">Tema</legend>
+        <div class="temas">
+          <label><input type="radio" name="tema" value="auto"><span>Automático</span></label>
+          <label><input type="radio" name="tema" value="claro"><span>Claro</span></label>
+          <label><input type="radio" name="tema" value="escuro"><span>Escuro</span></label>
+        </div>
+        <small class="dica">Automático segue o tema do seu aparelho.</small>
+      </fieldset>
+
+      <h2>Notificações</h2>
+      <div class="cartao" id="notif-prefs">
+        <div class="linha-opcao"><div><strong>Avaliações</strong><small>Quando alguém avalia sua loja</small></div><label class="interruptor"><input type="checkbox" data-notif="avaliacoes" aria-label="Notificações de avaliações"><i></i></label></div>
+        <div class="linha-opcao"><div><strong>Pedidos</strong><small>Pedidos feitos e recebidos</small></div><label class="interruptor"><input type="checkbox" data-notif="pedidos" aria-label="Notificações de pedidos"><i></i></label></div>
+        <div class="linha-opcao"><div><strong>Eventos</strong><small>Novos eventos das lojas que você já visitou</small></div><label class="interruptor"><input type="checkbox" data-notif="eventos" aria-label="Notificações de eventos"><i></i></label></div>
+        <div class="linha-opcao"><div><strong>Segurança</strong><small>Troca de senha e e-mail. Sempre ligado.</small></div><label class="interruptor"><input type="checkbox" checked disabled aria-label="Notificações de segurança"><i></i></label></div>
+      </div>
+
+      <h2>Privacidade</h2>
+      <div class="cartao">
+        <div class="linha-opcao"><div><strong>Mostrar meu nome nas avaliações</strong><small>Desligado, suas avaliações aparecem como “Anônimo”</small></div><label class="interruptor"><input type="checkbox" id="priv-nome" aria-label="Mostrar meu nome nas avaliações"><i></i></label></div>
+      </div>
+
+      <h2>Sessões e segurança</h2>
+      <div class="cartao">
+        <h3>Aparelhos conectados</h3>
+        <div id="sessoes"></div>
+        <button type="button" class="botao contorno" id="encerrar-outras"><i data-icone="escudo"></i>Sair de todos os outros aparelhos</button>
+      </div>
+
+      <h2>Excluir conta</h2>
+      <div class="cartao">
+        <p>Apaga sua conta e tudo ligado a ela: <span id="o-que-apaga"></span> Não dá para desfazer.</p>
+        <button type="button" class="botao perigo-contorno" id="abrir-excluir"><i data-icone="lixeira"></i>Excluir minha conta</button>
+        <form id="form-excluir" class="confirmacao oculto" novalidate>
+          <label for="x-senha">Sua senha</label>
+          <input id="x-senha" name="senha" type="password" autocomplete="current-password" required>
+          <label for="x-conf">Digite <strong>EXCLUIR</strong> para confirmar</label>
+          <input id="x-conf" name="confirmacao" autocomplete="off" required>
+          <div class="botoes-linha">
+            <button type="button" class="botao contorno" id="cancelar-excluir">Cancelar</button>
+            <button type="submit" class="botao perigo">Excluir para sempre</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+  <script src="../js/icones.js"></script>
+  <script src="../js/comum.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/conta-ui.js"></script>
+  <script src="../js/configuracoes.js"></script>
+</body>
+</html>

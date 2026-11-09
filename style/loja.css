@@ -394,3 +394,4 @@
   font-weight: 700;
   box-shadow: inset 0 3px 0 var(--sol);
 }
+.acoes-topo-linha { display: flex; align-items: center; gap: 8px; }

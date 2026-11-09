@@ -8,6 +8,7 @@ import os
 import re
 import secrets
 import sqlite3
+from datetime import timedelta
 from functools import wraps
 
 from dotenv import load_dotenv
@@ -19,6 +20,7 @@ RAIZ = os.path.dirname(PASTA)
 load_dotenv(os.path.join(RAIZ, ".env"))
 
 import banco  # noqa: E402  (precisa vir depois do load_dotenv por causa do DB_PATH)
+import conta  # noqa: E402
 
 app = Flask(__name__, static_folder=None)
 
@@ -42,6 +44,8 @@ app.config.update(
     SECRET_KEY=chave_secreta(),
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=os.environ.get("COOKIE_SEGURO") == "1",  # ligue só com HTTPS
+    PERMANENT_SESSION_LIFETIME=timedelta(days=conta.MAX_SESSAO_DIAS),
     MAX_CONTENT_LENGTH=6 * 1024 * 1024,
 )
 app.teardown_appcontext(banco.fechar)
@@ -121,7 +125,7 @@ def imagem_valida(valor):
 
 
 def usuario_logado():
-    id_usuario = session.get("id_usuario")
+    id_usuario = conta.id_usuario_da_sessao()
     if not id_usuario:
         return None
     return banco.conexao().execute("SELECT * FROM usuario WHERE id_usuario = ?", (id_usuario,)).fetchone()
@@ -157,13 +161,17 @@ def validar_conta(d, erros):
         erros["email"] = "E-mail inválido."
     if len(telefone) not in (10, 11):
         erros["telefone"] = "Telefone com DDD, 10 ou 11 dígitos."
+    validar_senha_nova(senha, confirmar, erros)
+    return nome, email, telefone, senha
+
+
+def validar_senha_nova(senha, confirmar, erros):
     if len(senha) < 8:
         erros["senha"] = "A senha precisa ter pelo menos 8 caracteres."
     elif not (re.search(r"[A-Za-z]", senha) and re.search(r"\d", senha)):
         erros["senha"] = "Use letras e números na senha."
     if senha != confirmar:
         erros["confirmar_senha"] = "As senhas não são iguais."
-    return nome, email, telefone, senha
 
 
 def validar_horarios(horarios, erros):
@@ -317,9 +325,14 @@ def arquivos(caminho):
 
 
 @app.after_request
-def sem_cache(resp):
-    if not request.path.startswith("/api/"):
+def cabecalhos(resp):
+    if request.path.startswith("/api/"):
+        resp.headers["Cache-Control"] = "no-store"  # dados da conta nunca ficam em cache
+    else:
         resp.headers["Cache-Control"] = "no-cache"
+    resp.headers["X-Content-Type-Options"] = "nosniff"
+    resp.headers["X-Frame-Options"] = "DENY"
+    resp.headers["Referrer-Policy"] = "same-origin"
     return resp
 
 
@@ -351,8 +364,10 @@ def cadastro_usuario():
         db.commit()
     except sqlite3.IntegrityError:
         raise ErroApi("Corrija os campos destacados.", {"email": "Este e-mail já está cadastrado."})
-    session.clear()
-    session["id_usuario"] = cur.lastrowid
+    conta.iniciar_sessao(cur.lastrowid)
+    conta.registrar_atividade(cur.lastrowid, "Conta criada")
+    conta.notificar(cur.lastrowid, "seguranca", "Bem-vindo ao Nordestinando", "Sua conta foi criada. Explore as lojas de Caruaru e avalie as que você visitar.", "explorar.html")
+    db.commit()
     return jsonify({"usuario": usuario_para_dict(usuario_logado())}), 201
 
 
@@ -391,8 +406,10 @@ def cadastro_comerciante():
         if "logista.cnpj" in str(e):
             raise ErroApi("Corrija os campos destacados.", {"cnpj": "Este CNPJ já está cadastrado."})
         raise ErroApi("Não foi possível salvar o cadastro.")
-    session.clear()
-    session["id_usuario"] = id_usuario
+    conta.iniciar_sessao(id_usuario)
+    conta.registrar_atividade(id_usuario, "Conta de comerciante criada")
+    conta.notificar(id_usuario, "seguranca", "Loja cadastrada", "Sua loja já aparece no mapa. Adicione produtos na vitrine e anuncie eventos.", "minha_loja.html")
+    db.commit()
     return jsonify({"usuario": usuario_para_dict(usuario_logado())}), 201
 
 
@@ -402,20 +419,27 @@ def login():
     email = texto(d, "email", 150).lower()
     senha = str(d.get("senha") or "")
     esperado = texto(d, "perfil", 10).upper()  # CLIENTE ou LOGISTA (o que a pessoa escolheu na tela)
+    chave = email + "|" + (request.remote_addr or "?")
+    maximo, janela = conta.LIMITE_LOGIN
+    if conta.tentativas_recentes("login", chave, janela) >= maximo:
+        raise ErroApi("Muitas tentativas erradas. Aguarde alguns minutos e tente de novo, ou use “Esqueci minha senha”.", status=429)
     u = banco.conexao().execute("SELECT * FROM usuario WHERE email = ?", (email,)).fetchone()
     if u is None or not check_password_hash(u["senha_hash"], senha):
+        conta.registrar_tentativa("login", chave)
         raise ErroApi("E-mail ou senha incorretos.", status=401)
     if esperado in ("CLIENTE", "LOGISTA") and u["perfil"] != esperado:
         quem = "comerciante" if u["perfil"] == "LOGISTA" else "usuário"
         raise ErroApi("Essa conta é de %s. Troque a opção acima." % quem, status=403)
-    session.clear()
-    session["id_usuario"] = u["id_usuario"]
+    conta.limpar_tentativas("login", chave)
+    conta.iniciar_sessao(u["id_usuario"])
+    conta.registrar_atividade(u["id_usuario"], "Login", conta._descrever_agente(request.headers.get("User-Agent")))
+    banco.conexao().commit()
     return jsonify({"usuario": usuario_para_dict(u)})
 
 
 @app.post("/api/logout")
 def logout():
-    session.clear()
+    conta.encerrar_sessao_atual()
     return jsonify({"ok": True})
 
 
@@ -451,7 +475,7 @@ def listar_eventos():
 @app.get("/api/lojas/<int:id_loja>/avaliacoes")
 def avaliacoes_da_loja(id_loja):
     linhas = banco.conexao().execute(
-        """SELECT a.*, u.nome FROM avaliacao a JOIN usuario u ON u.id_usuario = a.id_cliente
+        """SELECT a.*, u.nome, u.preferencias FROM avaliacao a JOIN usuario u ON u.id_usuario = a.id_cliente
            WHERE a.id_loja = ? ORDER BY a.id_avaliacao DESC""",
         (id_loja,),
     ).fetchall()
@@ -459,7 +483,8 @@ def avaliacoes_da_loja(id_loja):
 
 
 def avaliacao_para_dict(a):
-    primeiro = a["nome"].split()[0]
+    anonimo = not conta.preferencias_de(a)["privacidade"]["nome_nas_avaliacoes"]
+    primeiro = "Anônimo" if anonimo else a["nome"].split()[0]
     return {"cliente": primeiro, "nota": a["nota"], "comentario": a["comentario"], "data": a["data_criacao"]}
 
 
@@ -482,6 +507,11 @@ def avaliar(usuario, id_loja):
            DO UPDATE SET nota = excluded.nota, comentario = excluded.comentario, data_criacao = CURRENT_DATE""",
         (usuario["id_usuario"], id_loja, nota, texto(d, "comentario", 300)),
     )
+    dono = db.execute("SELECT id_logista, nome_fantasia FROM loja WHERE id_loja = ?", (id_loja,)).fetchone()
+    anonimo = not conta.preferencias_de(usuario)["privacidade"]["nome_nas_avaliacoes"]
+    quem = "Um cliente" if anonimo else usuario["nome"].split()[0]
+    conta.notificar(dono["id_logista"], "avaliacoes", "Nova avaliação: %d de 5" % nota, "%s avaliou %s." % (quem, dono["nome_fantasia"]), "minha_loja.html")
+    conta.registrar_atividade(usuario["id_usuario"], "Avaliou uma loja", "%s: %d de 5" % (dono["nome_fantasia"], nota))
     db.commit()
     return jsonify({"ok": True}), 201
 
@@ -500,6 +530,10 @@ def reservar(usuario, id_loja):
         "INSERT INTO pedido (id_cliente, id_loja, item, valor) VALUES (?, ?, ?, ?)",
         (usuario["id_usuario"], id_loja, item["nome"], item["valor"]),
     )
+    dono = db.execute("SELECT id_logista, nome_fantasia FROM loja WHERE id_loja = ?", (id_loja,)).fetchone()
+    conta.notificar(dono["id_logista"], "pedidos", "Novo pedido: %s" % item["nome"], "%s fez um pedido de R$ %.2f." % (usuario["nome"].split()[0], item["valor"]), "minha_loja.html")
+    conta.notificar(usuario["id_usuario"], "pedidos", "Pedido registrado", "%s em %s." % (item["nome"], dono["nome_fantasia"]), "explorar.html")
+    conta.registrar_atividade(usuario["id_usuario"], "Fez um pedido", "%s em %s" % (item["nome"], dono["nome_fantasia"]))
     db.commit()
     return jsonify({"ok": True}), 201
 
@@ -635,6 +669,13 @@ def evento_adicionar(usuario):
         "INSERT INTO evento (id_loja, nome, dia_semana, horario, descricao, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?)",
         (linha["id_loja"], nome, dia, horario, texto(d, "descricao", 300), lat, lng),
     )
+    # avisa quem já avaliou ou pediu nesta loja
+    interessados = db.execute(
+        "SELECT id_cliente FROM avaliacao WHERE id_loja = ? UNION SELECT id_cliente FROM pedido WHERE id_loja = ?",
+        (linha["id_loja"], linha["id_loja"]),
+    ).fetchall()
+    for i in interessados:
+        conta.notificar(i["id_cliente"], "eventos", "Novo evento: %s" % nome, "%s anunciou um evento na %s, às %s." % (linha["nome_fantasia"], dia, horario), "explorar.html")
     db.commit()
     return jsonify({"id": cur.lastrowid}), 201
 
@@ -688,6 +729,18 @@ def estatisticas(usuario):
             ],
         }
     )
+
+
+class _Ajudantes:
+    pass
+
+
+_aj = _Ajudantes()
+for _nome, _valor in dict(ErroApi=ErroApi, dados_json=dados_json, texto=texto, so_digitos=so_digitos, exigir=exigir,
+                          imagem_valida=imagem_valida, validar_senha_nova=validar_senha_nova,
+                          usuario_logado=usuario_logado).items():
+    setattr(_aj, _nome, _valor)
+conta.registrar_rotas(app, _aj)
 
 
 if __name__ == "__main__":

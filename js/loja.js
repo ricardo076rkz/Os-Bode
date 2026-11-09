@@ -86,6 +86,7 @@ document.addEventListener("click", function (e) {
 async function mostrarResumo() {
   try {
     await carregarLoja();
+    if (!pegarId("acoes-topo").firstChild) montarAcoesTopo(pegarId("acoes-topo"), { nome: loja.responsavel });
     const s = await api("GET", "/api/minha-loja/estatisticas");
     pegarId("r-nota").textContent = notaFormatada(s.nota_media);
     pegarId("r-aval").textContent = s.total_avaliacoes;

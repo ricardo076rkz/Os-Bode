@@ -28,5 +28,11 @@ def criar_tabelas():
         script = f.read()
     con = sqlite3.connect(CAMINHO_BANCO)
     con.executescript(script)
+    # bancos criados antes desta versão ganham as colunas novas
+    colunas = {c[1] for c in con.execute("PRAGMA table_info(usuario)")}
+    if "avatar" not in colunas:
+        con.execute("ALTER TABLE usuario ADD COLUMN avatar TEXT")
+    if "preferencias" not in colunas:
+        con.execute("ALTER TABLE usuario ADD COLUMN preferencias TEXT NOT NULL DEFAULT '{}'")
     con.commit()
     con.close()

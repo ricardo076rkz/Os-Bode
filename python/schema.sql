@@ -77,3 +77,54 @@ CREATE TABLE IF NOT EXISTS evento (
     latitude   REAL,
     longitude  REAL
 );
+
+-- ---------------------------------------------------------------- conta, segurança e notificações
+-- sessões ativas (o cookie guarda um token; aqui fica só o hash dele)
+CREATE TABLE IF NOT EXISTS sessao (
+    id_sessao  INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario INTEGER NOT NULL REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    token_hash TEXT NOT NULL UNIQUE,
+    criado_em  TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ultimo_uso TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ip         TEXT,
+    agente     TEXT
+);
+
+CREATE TABLE IF NOT EXISTS notificacao (
+    id_notificacao INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario     INTEGER NOT NULL REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    categoria      TEXT NOT NULL CHECK (categoria IN ('avaliacoes', 'pedidos', 'eventos', 'seguranca')),
+    titulo         TEXT NOT NULL,
+    mensagem       TEXT NOT NULL,
+    link           TEXT,
+    lida           INTEGER NOT NULL DEFAULT 0,
+    criada_em      TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_notificacao_usuario ON notificacao (id_usuario, lida, id_notificacao);
+
+-- histórico de atividades da conta
+CREATE TABLE IF NOT EXISTS atividade (
+    id_atividade INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario   INTEGER NOT NULL REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    acao         TEXT NOT NULL,
+    detalhe      TEXT,
+    criada_em    TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_atividade_usuario ON atividade (id_usuario, id_atividade);
+
+-- limite de tentativas (login e "esqueci a senha")
+CREATE TABLE IF NOT EXISTS tentativa (
+    id_tentativa INTEGER PRIMARY KEY AUTOINCREMENT,
+    tipo         TEXT NOT NULL,
+    chave        TEXT NOT NULL,
+    criada_em    REAL NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_tentativa ON tentativa (tipo, chave, criada_em);
+
+-- links de redefinição de senha (só o hash do token é guardado)
+CREATE TABLE IF NOT EXISTS redefinicao_senha (
+    token_hash TEXT PRIMARY KEY,
+    id_usuario INTEGER NOT NULL REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    expira_em  REAL NOT NULL,
+    usada      INTEGER NOT NULL DEFAULT 0
+);

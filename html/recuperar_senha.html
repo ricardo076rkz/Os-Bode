@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Recuperar senha</title>
+  <script src="../js/tema.js"></script>
   <link rel="stylesheet" href="../style/style.css">
 </head>
 <body>
@@ -13,21 +14,23 @@
       <h1>Recuperar senha</h1>
     </div>
 
-    <form id="form-recuperar" class="cartao">
+    <form id="form-recuperar" class="cartao" novalidate>
       <p>Digite o email cadastrado. Vamos enviar um link para criar uma nova senha.</p>
 
       <label for="email">Email</label>
-      <input type="email" id="email" required>
+      <input type="email" id="email" name="email" autocomplete="email" required>
 
       <button type="submit" class="botao">Enviar link</button>
 
-      <p id="aviso-enviado" class="aviso-ok oculto">O envio de link por e-mail ainda não está ativo neste sistema. Peça ao administrador para redefinir sua senha.</p>
+      <p id="aviso-enviado" class="mensagem oculto" role="status"></p>
     </form>
 
     <a class="esqueci" href="comerciante.html">← Voltar ao login</a>
   </main>
 
   <script src="../js/icones.js"></script>
+  <script src="../js/comum.js"></script>
+  <script src="../js/api.js"></script>
   <script src="../js/recuperar.js"></script>
 </body>
 </html>

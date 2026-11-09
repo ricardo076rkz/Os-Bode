@@ -77,7 +77,11 @@ O banco é um arquivo (`python/nordestinando.db`) **na máquina de cada pessoa**
 | Cadastro da loja | `html/cadastrar_estabelecimento.html` | 4 etapas: seus dados, estabelecimento, endereço e localização, horários |
 | Minha loja | `html/minha_loja.html` | Painel do comerciante |
 | Explorar | `html/explorar.html` | Mapa, clima, lojas e eventos |
-| Recuperar senha | `html/recuperar_senha.html` | Avisa que o envio por e-mail ainda não existe |
+| Recuperar senha | `html/recuperar_senha.html` | Pede o link de nova senha (por e-mail, se o SMTP estiver no `.env`) |
+| Nova senha | `html/redefinir_senha.html` | Abre pelo link recebido (`?token=...`, vale 1 hora, uso único) |
+| Meu perfil | `html/perfil.html` | Foto, dados, trocar senha, histórico de atividades, sair |
+| Notificações | `html/notificacoes.html` | Central: não lidas, marcar lida, marcar todas, excluir, apagar lidas |
+| Configurações | `html/configuracoes.html` | Tema claro/escuro, notificações por categoria, privacidade, aparelhos conectados, excluir conta |
 
 ## 4. Perfis e permissões
 
@@ -90,6 +94,21 @@ O servidor confere o perfil em toda ação.
 | Reservar item da vitrine | sim | não |
 | Painel "Minha loja" | não | sim, só da própria loja |
 | Entrar pela opção errada (usuário como comerciante) | recusado | recusado |
+| Perfil, notificações, configurações (só os próprios) | sim | sim |
+
+**Conta e segurança:** as sessões ficam no banco (dá para desconectar aparelhos); trocar ou redefinir a senha derruba os outros aparelhos; 5 senhas erradas em 10 minutos bloqueiam o login por um tempo; o link de nova senha guarda só o hash do token; excluir a conta pede a senha e a palavra EXCLUIR e apaga tudo ligado a ela.
+
+**Notificações** são geradas por ações reais: nova avaliação e novo pedido (para o comerciante), pedido registrado e novo evento de loja já visitada (para o usuário), troca de senha ou e-mail (segurança, sempre ligada). Cada pessoa liga e desliga as categorias em Configurações. O sino confere novidades a cada 30 segundos (não é tempo real por WebSocket).
+
+### Recuperar senha por e-mail
+No `.env`, preencha `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` e `APP_URL` (veja `.env.exemplo`). Sem isso, o link de nova senha é impresso no terminal onde o servidor roda (serve para testar).
+
+### Testes automáticos
+```
+python tests/teste_api.py          # cadastro, login, permissões, loja, vitrine
+python tests/teste_conta_api.py    # perfil, senha, sessões, notificações, recuperação, exclusão
+```
+Cada um usa um banco temporário e imprime `FALHAS: 0` / `OK n FALHAS 0` quando passa.
 
 ## 5. APIs gratuitas (nenhuma precisa de chave)
 
@@ -148,6 +167,7 @@ O servidor precisa estar ligado em um computador e o celular/emulador acessa por
 ## 9. O que ainda falta
 
 - Banco em PostgreSQL, se o professor exigir (hoje é SQLite).
-- Envio de e-mail na recuperação de senha.
+- Configurar um SMTP real para o e-mail de recuperação (o código já está pronto).
+- Notificações em tempo real (hoje é consulta a cada 30 s).
 - Trocar a senha do banco que ficou no histórico do GitHub (estava no `.env.exemplo` antigo).
 - Foto de fundo da estação ferroviária (`js/img/estacao.jpg` não existe).
