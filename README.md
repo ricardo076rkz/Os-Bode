@@ -1,4 +1,6 @@
-# Nordestinando
+# Nordestinando (versão de teste)
+
+> **Branch `teste-por-cima`: modo de teste.** Aqui não precisa cadastro: no login, digite **qualquer usuário e qualquer senha** (escolhendo "Sou usuário" ou "Sou comerciante") e a conta é criada na hora. Comerciante já ganha uma loja de teste para editar. Para desligar, crie o `.env` com `MODO_TESTE=0`. Não use esta versão com dados reais: qualquer pessoa entra em qualquer conta.
 
 Guia de cidade (Caruaru) com área do comerciante. Front em HTML/CSS/JS, servidor em Flask (Python) e banco SQLite.
 

@@ -47,6 +47,10 @@ app.config.update(
 app.teardown_appcontext(banco.fechar)
 banco.criar_tabelas()
 
+# MODO DE TESTE (branch teste-por-cima): qualquer e-mail/usuário e senha entram.
+# Se a pessoa não existe, a conta é criada na hora (e, para comerciante, uma loja de teste).
+MODO_TESTE = os.environ.get("MODO_TESTE", "1") == "1"
+
 DIAS = ["seg", "ter", "qua", "qui", "sex", "sab", "dom"]
 DIAS_EVENTO = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
 SEGMENTOS = ["Alimentação", "Cafeteria", "Artesanato", "Souvenirs", "Vestuário", "Serviços", "Outros"]
@@ -326,7 +330,7 @@ def sem_cache(resp):
 # ---------------------------------------------------------------- configuração e conta
 @app.get("/api/config")
 def config():
-    return jsonify({"segmentos": SEGMENTOS})
+    return jsonify({"segmentos": SEGMENTOS, "modo_teste": MODO_TESTE})
 
 
 @app.get("/api/eu")
@@ -396,9 +400,54 @@ def cadastro_comerciante():
     return jsonify({"usuario": usuario_para_dict(usuario_logado())}), 201
 
 
+def login_teste(d):
+    """Entra com qualquer usuário e senha, criando a conta se ainda não existir."""
+    email = texto(d, "email", 150).lower()
+    senha = str(d.get("senha") or "")
+    perfil = texto(d, "perfil", 10).upper()
+    if perfil not in ("CLIENTE", "LOGISTA"):
+        perfil = "CLIENTE"
+    if not email or not senha:
+        raise ErroApi("Digite qualquer usuário e qualquer senha.", {"email": "Digite um usuário.", "senha": "Digite uma senha."})
+
+    db = banco.conexao()
+    u = db.execute("SELECT * FROM usuario WHERE email = ?", (email,)).fetchone()
+    if u is None:
+        nome = email.split("@")[0].replace(".", " ").replace("_", " ").title() or "Visitante"
+        cur = db.execute(
+            "INSERT INTO usuario (nome, email, telefone, senha_hash, perfil) VALUES (?, ?, '', ?, ?)",
+            (nome, email, generate_password_hash(senha), perfil),
+        )
+        id_usuario = cur.lastrowid
+    else:
+        id_usuario = u["id_usuario"]
+        if u["perfil"] != perfil:
+            db.execute("UPDATE usuario SET perfil = ? WHERE id_usuario = ?", (perfil, id_usuario))
+
+    if perfil == "LOGISTA":
+        db.execute("INSERT OR IGNORE INTO logista (id_usuario) VALUES (?)", (id_usuario,))
+        if not db.execute("SELECT 1 FROM loja WHERE id_logista = ?", (id_usuario,)).fetchone():
+            nome_usuario = db.execute("SELECT nome FROM usuario WHERE id_usuario = ?", (id_usuario,)).fetchone()["nome"]
+            horarios = {d_: {"fechado": False, "abre": "08:00", "fecha": "18:00"} for d_ in DIAS}
+            db.execute(
+                """INSERT INTO loja (id_logista, nome_fantasia, segmento, descricao, cep, rua, numero, bairro,
+                                     cidade, estado, latitude, longitude, horarios, telefone)
+                   VALUES (?, ?, 'Outros', 'Loja criada automaticamente no modo de teste. Edite em Dados e localização.',
+                           '55012000', 'Rua Quinze de Novembro', '1', 'Centro', 'Caruaru', 'PE',
+                           -8.2829, -35.9761, ?, '8100000000')""",
+                (id_usuario, "Loja de " + nome_usuario, json.dumps(horarios)),
+            )
+    db.commit()
+    session.clear()
+    session["id_usuario"] = id_usuario
+    return jsonify({"usuario": usuario_para_dict(usuario_logado())})
+
+
 @app.post("/api/login")
 def login():
     d = dados_json()
+    if MODO_TESTE:
+        return login_teste(d)
     email = texto(d, "email", 150).lower()
     senha = str(d.get("senha") or "")
     esperado = texto(d, "perfil", 10).upper()  # CLIENTE ou LOGISTA (o que a pessoa escolheu na tela)
