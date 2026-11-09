@@ -332,7 +332,7 @@ def cabecalhos(resp):
         resp.headers["Cache-Control"] = "no-cache"
     resp.headers["X-Content-Type-Options"] = "nosniff"
     resp.headers["X-Frame-Options"] = "DENY"
-    resp.headers["Referrer-Policy"] = "same-origin"
+    resp.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"  # o OpenStreetMap exige o Referer nos mapas
     return resp
 
 
