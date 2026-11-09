@@ -1,0 +1,420 @@
+/* Nordestinando - estilo geral
+   Uma paleta só para todas as telas (a mesma que o grupo já usava no style1.css) */
+
+:root {
+  --laranja: #e8692f;
+  --laranja-escuro: #c2410c;
+  --creme: #fff1e6;
+  --creme-claro: #fff8f2;
+  --texto: #7c2d12;
+  --borda: #f3dccb;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  background: linear-gradient(160deg, #a36a1f, #cfb464);
+  color: var(--texto);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+/* "celular" no computador; no celular de verdade ocupa a tela toda */
+.tela {
+  width: 100%;
+  max-width: 390px;
+  height: min(844px, calc(100vh - 32px));
+  height: min(844px, calc(100dvh - 32px));
+  padding: 24px 24px 32px;
+  background: linear-gradient(180deg, var(--creme), var(--creme-claro));
+  border-radius: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  overflow-y: auto;
+}
+
+@media (max-width: 500px) {
+  body {
+    padding: 0;
+    background: var(--creme);
+  }
+
+  .tela {
+    max-width: none;
+    height: 100vh;
+    height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+/* foto da estação de fundo (login, cadastro e recuperar senha) */
+.fundo-estacao {
+  background: linear-gradient(rgba(255, 241, 230, 0.92), rgba(255, 248, 242, 0.92)),
+    url("../js/img/estacao.jpg") center / cover no-repeat;
+  background-color: var(--creme);
+}
+
+.oculto {
+  display: none;
+}
+
+/* ---------- textos e links ---------- */
+h1,
+h2,
+h3 {
+  color: var(--laranja-escuro);
+}
+
+h1 {
+  font-size: 1.7rem;
+  margin-bottom: 16px;
+}
+
+h2 {
+  font-size: 1.25rem;
+}
+
+h3 {
+  font-size: 1.05rem;
+  margin: 22px 0 10px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.esqueci {
+  display: block;
+  text-align: center;
+  margin: 16px 0 4px;
+  font-size: 0.85rem;
+  color: var(--laranja-escuro);
+}
+
+.esqueci:hover {
+  text-decoration: underline;
+}
+
+.subtitulo {
+  margin-top: 22px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--laranja-escuro);
+}
+
+.vazio {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.aviso-ok {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--creme);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.estrelas {
+  color: var(--laranja);
+}
+
+/* ---------- botões ---------- */
+.botao {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 14px;
+  margin-top: 12px;
+  border: 2px solid var(--laranja);
+  border-radius: 12px;
+  background: var(--laranja);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.botao:hover {
+  background: var(--laranja-escuro);
+  border-color: var(--laranja-escuro);
+}
+
+.botao:active {
+  opacity: 0.8;
+}
+
+/* botão só com borda */
+.cadastrar {
+  background: transparent;
+  color: var(--laranja-escuro);
+}
+
+.cadastrar:hover {
+  background: var(--creme);
+  color: var(--laranja-escuro);
+}
+
+/* ---------- formulários ---------- */
+label {
+  display: block;
+  font-size: 0.8rem;
+  margin: 14px 0 6px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  background: var(--creme-claro);
+  color: var(--texto);
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--laranja);
+}
+
+input[type="file"] {
+  padding: 10px;
+  background: #fff;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.cartao {
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: 20px;
+  padding: 16px;
+}
+
+.dupla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ---------- faixa de cima (login, cadastro, recuperar senha) ---------- */
+.topo {
+  height: 140px;
+  margin: -24px -24px 24px;
+  background: linear-gradient(160deg, var(--laranja), var(--laranja-escuro));
+  border-radius: 0 0 40px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+
+.topo-pequeno {
+  height: 110px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.topo-pequeno h1 {
+  margin: 0;
+  font-size: 22px;
+  color: #fff;
+}
+
+/* ---------- tela inicial ---------- */
+.inicio {
+  text-align: center;
+}
+
+.logo {
+  display: block;
+  width: 100px;
+  height: auto;
+  margin: 0 auto 4px;
+}
+
+.inicio h1 {
+  font-size: 2rem;
+  margin-bottom: 18px;
+}
+
+.imagem {
+  height: 250px;
+  margin-bottom: 8px;
+  border: 1px solid var(--borda);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--creme);
+}
+
+.imagem img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ---------- login com perfil (consumidor / vendedor) ---------- */
+.entrar {
+  text-align: center;
+}
+
+.entrar form {
+  text-align: left;
+}
+
+.perfil {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--creme);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 8px;
+}
+
+.perfil-opcao {
+  margin: 0;
+}
+
+.perfil-opcao input {
+  display: none;
+}
+
+.perfil-opcao span {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 9px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.perfil-opcao input:checked + span {
+  background: #fff;
+  font-weight: 600;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+#campos-vendedor {
+  display: none;
+}
+
+#campos-vendedor.aberto {
+  display: block;
+}
+
+/* ---------- explorar cidade ---------- */
+.barra-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.barra-topo h1 {
+  margin: 0;
+}
+
+.link-topo {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--laranja-escuro);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 4px;
+}
+
+.chip {
+  padding: 8px 14px;
+  border: 1px solid var(--borda);
+  border-radius: 20px;
+  background: #fff;
+  color: var(--texto);
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.chip.ativo {
+  background: var(--laranja);
+  border-color: var(--laranja);
+  color: #fff;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--borda);
+  border-radius: 16px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.card h4 {
+  color: var(--laranja-escuro);
+}
+
+.card p {
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.card .detalhe {
+  font-size: 0.8rem;
+}
+
+.item-vitrine {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.item-vitrine img {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.item-vitrine span:first-of-type {
+  flex: 1;
+}
+
+.item-vitrine strong {
+  color: var(--laranja-escuro);
+}
