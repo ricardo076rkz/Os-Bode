@@ -194,3 +194,7 @@ Para **incluir um novo evento**, acrescente um item em `python/dados/eventos_cid
 - **Pagamento**: NÃO há gateway integrado. Com `PAGAMENTO_DEMO=1` a assinatura é simulada e marcada como DEMONSTRAÇÃO; sem isso o botão recusa com aviso e nada é ativado. A estrutura de produção é o webhook `POST /api/premium/webhook` (HMAC com `PAGAMENTO_WEBHOOK_SEGREDO`), idempotente por referência.
 - **Indicadores**: `GET /api/admin/gamificacao` com o cabeçalho `X-Admin-Token` (`ADMIN_TOKEN`).
 - Testes: `python tests/teste_gamificacao_api.py`.
+
+## LGPD
+
+Aceite obrigatório e versionado nos cadastros, páginas `privacidade.html` e `termos.html`, exportação e exclusão dos dados pelo próprio titular, retenção automática de dados técnicos e mapa de dados em [`docs/LGPD.md`](docs/LGPD.md). Defina `LGPD_CONTATO_EMAIL` e `LGPD_CONTROLADOR` no `.env`. Testes: `python tests/teste_lgpd_api.py`.

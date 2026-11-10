@@ -135,3 +135,25 @@ async function iniciar() {
   carregarSessoes();
 }
 iniciar();
+
+
+// ---------- LGPD: baixar meus dados ----------
+pegarId("baixar-dados").addEventListener("click", async function () {
+  try {
+    const dados = await api("GET", "/api/lgpd/meus-dados");
+    const arq = new Blob([JSON.stringify(dados, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(arq);
+    a.download = "meus-dados-nordestinando.json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    aviso("Download iniciado.", "ok");
+  } catch (e) {
+    aviso(e.erro || "Não foi possível gerar o arquivo.", "erro");
+  }
+});
+api("GET", "/api/lgpd/aceite").then(function (d) {
+  const ult = d.aceitou.privacidade;
+  pegarId("aceite-info").textContent = ult ? "Você aceitou a versão " + ult + " dos documentos." : "";
+}, function () {});

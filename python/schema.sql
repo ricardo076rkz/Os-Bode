@@ -237,3 +237,22 @@ CREATE TABLE IF NOT EXISTS pagamento (
     referencia_externa TEXT UNIQUE,
     criado_em          TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+-- ---------------------------------------------------------------- LGPD
+-- registro de aceite dos documentos (prova de consentimento: qual versão, quando)
+CREATE TABLE IF NOT EXISTS consentimento (
+    id_consentimento INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario       INTEGER NOT NULL REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    documento        TEXT NOT NULL CHECK (documento IN ('termos', 'privacidade')),
+    versao           TEXT NOT NULL,
+    aceito_em        TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_consentimento ON consentimento (id_usuario);
+
+-- pedidos dos titulares (acesso, correção, exclusão, etc.) para acompanhar o prazo legal
+CREATE TABLE IF NOT EXISTS solicitacao_titular (
+    id_solicitacao INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario     INTEGER REFERENCES usuario(id_usuario) ON DELETE SET NULL,
+    tipo           TEXT NOT NULL,
+    criada_em      TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

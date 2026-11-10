@@ -117,7 +117,8 @@ async function enviar() {
     cep: valor("cep"), rua: valor("rua"), numero: valor("numero"), bairro: valor("bairro"),
     cidade: valor("cidade"), estado: valor("estado"),
     latitude: valor("latitude"), longitude: valor("longitude"),
-    horarios: lerHorarios(pegarId("horarios"))
+    horarios: lerHorarios(pegarId("horarios")),
+    aceite: pegarId("aceite").checked
   };
 
   try {

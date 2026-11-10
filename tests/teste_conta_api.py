@@ -12,7 +12,7 @@ def t(nome, cond, extra=""):
 def cli(): return A.app.test_client()
 c = cli()
 J = lambda r: r.get_json()
-cad = dict(nome="Maria Silva", email="maria@x.com", telefone="81999998888", senha="senha1234", confirmar_senha="senha1234")
+cad = dict(nome="Maria Silva", email="maria@x.com", telefone="81999998888", senha="senha1234", confirmar_senha="senha1234", aceite=True)
 r = c.post("/api/cadastro/usuario", json=cad); t("cadastro", r.status_code == 201, r.data)
 t("sem login 401", cli().get("/api/conta").status_code == 401)
 t("sem login notif 401", cli().get("/api/notificacoes").status_code == 401)

@@ -64,7 +64,8 @@ formConta.addEventListener("submit", async function (e) {
       email: pegarId("c-email").value,
       telefone: pegarId("c-telefone").value,
       senha: pegarId("c-senha").value,
-      confirmar_senha: pegarId("c-confirmar").value
+      confirmar_senha: pegarId("c-confirmar").value,
+      aceite: pegarId("c-aceite").checked
     });
     irParaAreaDoPerfil(dados.usuario);
   } catch (erro) {

@@ -399,6 +399,7 @@ def registrar_rotas(app, h):
         if erros:
             raise ErroApi("Não foi possível excluir a conta.", erros)
         db = banco.conexao()
+        db.execute("INSERT INTO solicitacao_titular (id_usuario, tipo) VALUES (NULL, 'exclusao')")  # registra só o fato, sem identificar
         # as chaves estrangeiras em cascata apagam loja, pedidos, avaliações, sessões e notificações
         db.execute("DELETE FROM usuario WHERE id_usuario = ?", (u["id_usuario"],))
         db.commit()

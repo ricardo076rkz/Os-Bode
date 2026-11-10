@@ -34,6 +34,8 @@ function montarAcoesTopo(container, usuario) {
   perfil.appendChild(criar("span", "inicial", inicial(usuario.nome)));
   container.appendChild(perfil);
 
+  verificarAceite();
+
   api("GET", "/api/conta").then(function (d) {
     aplicarTema(d.conta.preferencias.tema);
     if (d.conta.avatar) {
@@ -63,4 +65,39 @@ function dataHoraBR(texto) {
   const d = new Date(String(texto).replace(" ", "T") + "Z");
   if (isNaN(d)) return "";
   return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" }) + " às " + d.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+}
+
+
+// contas antigas, ou mudança de versão dos documentos: pede um novo aceite
+function verificarAceite() {
+  api("GET", "/api/lgpd/aceite").then(function (d) {
+    if (!d.precisa_reaceitar || document.getElementById("dialogo-aceite")) return;
+    const dlg = document.createElement("dialog");
+    dlg.id = "dialogo-aceite";
+    dlg.addEventListener("cancel", function (e) { e.preventDefault(); });
+    dlg.appendChild(criar("h2", "", "Atualizamos nossos documentos"));
+    const p = criar("p", "");
+    p.appendChild(document.createTextNode("Para continuar, leia e aceite os "));
+    [["Termos de Uso", "termos.html"], [" e a Política de Privacidade", "privacidade.html"]].forEach(function (l, i) {
+      const a = criar("a", "", l[0].trim());
+      a.href = l[1]; a.target = "_blank"; a.rel = "noopener";
+      if (i) p.appendChild(document.createTextNode(" e a "));
+      p.appendChild(a);
+    });
+    dlg.appendChild(p);
+    const lb = criar("label", "aceite");
+    const cb = document.createElement("input"); cb.type = "checkbox";
+    lb.appendChild(cb); lb.appendChild(criar("span", "", "Li e aceito."));
+    dlg.appendChild(lb);
+    const msgE = criar("p", "mensagem erro oculto");
+    dlg.appendChild(msgE);
+    const bt = criar("button", "botao", "Continuar"); bt.type = "button";
+    bt.addEventListener("click", function () {
+      if (!cb.checked) { mostrarMensagem(msgE, "Marque a caixa para continuar.", "erro"); return; }
+      api("POST", "/api/lgpd/aceite", { aceite: true }).then(function () { dlg.close(); dlg.remove(); }, function (e) { mostrarMensagem(msgE, e.erro, "erro"); });
+    });
+    dlg.appendChild(bt);
+    document.body.appendChild(dlg);
+    dlg.showModal();
+  }, function () {});
 }

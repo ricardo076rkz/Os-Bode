@@ -16,7 +16,7 @@ def uid(email):
     with A.app.app_context():
         return banco.conexao().execute("SELECT id_usuario FROM usuario WHERE email = ?", (email,)).fetchone()[0]
 cli = A.app.test_client
-cad = dict(nome="Maria Silva", email="maria@x.com", telefone="81999998888", senha="senha1234", confirmar_senha="senha1234")
+cad = dict(nome="Maria Silva", email="maria@x.com", telefone="81999998888", senha="senha1234", confirmar_senha="senha1234", aceite=True)
 loja = dict(nome_fantasia="Loja do João", segmento="Outros", descricao="Descrição da loja", cep="55012000", rua="Rua A", numero="1", bairro="Centro", cidade="Caruaru", estado="PE", latitude=-8.28, longitude=-35.97, telefone_comercial="81988887777",
             horarios={k: {"fechado": False, "abre": "08:00", "fecha": "18:00"} for k in A.DIAS})
 cm, lj, lj2 = cli(), cli(), cli()

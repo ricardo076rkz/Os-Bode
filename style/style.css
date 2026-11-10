@@ -1310,3 +1310,16 @@ dialog#dialogo-voucher::backdrop, dialog#dialogo-avaliar::backdrop { background:
 .premium-aviso:empty { display: none; }
 .promo { margin-top: 12px; }
 @media (max-width: 420px) { .criterios { grid-template-columns: 1fr; } }
+
+/* ---------- documentos legais e privacidade ---------- */
+.documento section { margin-top: 18px; }
+.documento h2 { font-size: 1.1rem; margin: 0 0 6px; }
+.documento p, .documento li { line-height: 1.55; max-width: 68ch; }
+.documento ul { padding-left: 18px; }
+.documento a { color: var(--cor-principal); font-weight: 700; }
+.doc-versao { color: var(--texto-suave); font-size: 0.85rem; }
+.aceite { display: flex; gap: 10px; align-items: flex-start; margin-top: 14px; font-size: 0.9rem; line-height: 1.45; }
+.aceite input { width: 22px; height: 22px; margin: 1px 0 0; flex: none; }
+.aceite a { color: var(--cor-principal); font-weight: 700; }
+dialog#dialogo-aceite { width: min(480px, calc(100% - 24px)); margin: auto; padding: 20px; border: 0; border-radius: 20px; background: var(--superficie); color: var(--texto); box-shadow: 0 24px 80px rgba(0,0,0,.35); }
+dialog#dialogo-aceite::backdrop { background: rgba(15, 12, 30, 0.6); }

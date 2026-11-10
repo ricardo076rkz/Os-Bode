@@ -23,6 +23,7 @@ import banco  # noqa: E402  (precisa vir depois do load_dotenv por causa do DB_P
 import agenda  # noqa: E402
 import conta  # noqa: E402
 import gamificacao  # noqa: E402
+import lgpd  # noqa: E402
 
 app = Flask(__name__, static_folder=None)
 
@@ -327,6 +328,11 @@ def arquivos(caminho):
     return send_from_directory(RAIZ, caminho)
 
 
+@app.before_request
+def limpeza_periodica():
+    lgpd.limpar_se_preciso()
+
+
 @app.after_request
 def cabecalhos(resp):
     if request.path.startswith("/api/"):
@@ -335,6 +341,9 @@ def cabecalhos(resp):
         resp.headers["Cache-Control"] = "no-cache"
     resp.headers["X-Content-Type-Options"] = "nosniff"
     resp.headers["X-Frame-Options"] = "DENY"
+    resp.headers["Permissions-Policy"] = "camera=(), microphone=(), payment=(), geolocation=(self)"
+    if os.environ.get("COOKIE_SEGURO") == "1":
+        resp.headers["Strict-Transport-Security"] = "max-age=31536000"
     resp.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"  # o OpenStreetMap exige o Referer nos mapas
     return resp
 
@@ -356,6 +365,7 @@ def cadastro_usuario():
     d = dados_json()
     erros = {}
     nome, email, telefone, senha = validar_conta(d, erros)
+    lgpd.exigir_aceite(d, erros)
     if erros:
         raise ErroApi("Corrija os campos destacados.", erros)
     db = banco.conexao()
@@ -364,6 +374,7 @@ def cadastro_usuario():
             "INSERT INTO usuario (nome, email, telefone, senha_hash, perfil) VALUES (?, ?, ?, ?, 'CLIENTE')",
             (nome, email, telefone, generate_password_hash(senha)),
         )
+        lgpd.registrar_aceite(cur.lastrowid)
         db.commit()
     except sqlite3.IntegrityError:
         raise ErroApi("Corrija os campos destacados.", {"email": "Este e-mail já está cadastrado."})
@@ -381,6 +392,7 @@ def cadastro_comerciante():
     nome, email, telefone, senha = validar_conta(d, erros)
     cnpj, razao = validar_cnpj_opcional(d, erros)
     loja = validar_loja(d, erros)
+    lgpd.exigir_aceite(d, erros)
     if erros:
         raise ErroApi("Corrija os campos destacados.", erros)
 
@@ -401,6 +413,7 @@ def cadastro_comerciante():
                        :site, :logo, :foto)""",
             dict(loja, id=id_usuario),
         )
+        lgpd.registrar_aceite(id_usuario)
         db.commit()
     except sqlite3.IntegrityError as e:
         db.rollback()
@@ -760,6 +773,7 @@ for _nome, _valor in dict(ErroApi=ErroApi, dados_json=dados_json, texto=texto, s
 conta.registrar_rotas(app, _aj)
 agenda.registrar_rotas(app)
 gamificacao.registrar_rotas(app, _aj)
+lgpd.registrar_rotas(app, _aj)
 
 
 if __name__ == "__main__":

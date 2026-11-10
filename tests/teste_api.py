@@ -8,7 +8,7 @@ def ok(cond, msg):
     if not cond: ok.f += 1
 ok.f = 0
 H = {d: {"fechado": d in ("dom",), "abre": "08:00", "fecha": "18:00"} for d in A.DIAS}
-loja = dict(nome="Carlos Dono", email="carlos@email.com", telefone="(81) 99999-2222", senha="senha1234", confirmar_senha="senha1234",
+loja = dict(aceite=True, nome="Carlos Dono", email="carlos@email.com", telefone="(81) 99999-2222", senha="senha1234", confirmar_senha="senha1234",
   razao_social="Carlos Pastelaria LTDA", cnpj="11.222.333/0001-81", nome_fantasia="Pastelaria do Carlos", segmento="Alimentação",
   descricao="Pastéis e caldo de cana no centro.", cep="55012-000", rua="Rua Quinze de Novembro", numero="10", bairro="Centro",
   cidade="Caruaru", estado="pe", latitude=-8.2830, longitude=-35.9760, horarios=H, telefone_comercial="(81) 3721-0000",
@@ -39,7 +39,7 @@ r = c.post(f"/api/lojas/{idl}/avaliacoes", json={"nota":5}); ok(r.status_code==4
 c.post("/api/logout")
 r = c.get("/api/minha-loja"); ok(r.status_code==401, "painel sem login = 401")
 # usuário
-r = c.post("/api/cadastro/usuario", json=dict(nome="Maria Silva", email="maria@email.com", telefone="81999991111", senha="maria1234", confirmar_senha="maria1234")); ok(r.status_code==201 and r.json["usuario"]["perfil"]=="CLIENTE", "cadastro de usuário")
+r = c.post("/api/cadastro/usuario", json=dict(nome="Maria Silva", email="maria@email.com", telefone="81999991111", senha="maria1234", confirmar_senha="maria1234", aceite=True)); ok(r.status_code==201 and r.json["usuario"]["perfil"]=="CLIENTE", "cadastro de usuário")
 r = c.get("/api/minha-loja"); ok(r.status_code==403, "usuário NÃO acessa painel do comerciante (403)")
 r = c.post(f"/api/lojas/{idl}/avaliacoes", json={"nota":5,"comentario":"Ótimo!"}); ok(r.status_code==201, "usuário avalia")
 r = c.post(f"/api/lojas/{idl}/avaliacoes", json={"nota":4,"comentario":"Mudei"}); ok(c.get(f"/api/lojas/{idl}/avaliacoes").json["avaliacoes"][0]["nota"]==4 and len(c.get(f"/api/lojas/{idl}/avaliacoes").json["avaliacoes"])==1, "reavaliar atualiza (1 por usuário)")
