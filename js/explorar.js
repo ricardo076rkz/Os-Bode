@@ -93,35 +93,17 @@ async function mostrarChips() {
 }
 
 function formularioAvaliar(l) {
-  const form = criar("form", "avaliar");
-  const select = document.createElement("select");
-  [5, 4, 3, 2, 1].forEach(function (n) {
-    const o = document.createElement("option");
-    o.value = n;
-    o.textContent = n + (n == 1 ? " estrela" : " estrelas");
-    select.appendChild(o);
-  });
-  const texto = document.createElement("input");
-  texto.type = "text";
-  texto.placeholder = "Comentário (opcional)";
-  texto.maxLength = 300;
-  const enviar = criar("button", "botao", "Enviar avaliação");
-  enviar.type = "submit";
-  form.appendChild(select);
-  form.appendChild(texto);
-  form.appendChild(enviar);
-
-  form.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    try {
-      await api("POST", "/api/lojas/" + l.id + "/avaliacoes", { nota: select.value, comentario: texto.value });
-      mostrarMensagem(msg, "Avaliação enviada. Obrigado!", "ok");
+  const caixa = criar("div", "avaliar");
+  const abrir = criar("button", "botao", "Avaliar e ganhar pontos");
+  abrir.type = "button";
+  abrir.addEventListener("click", function () {
+    abrirAvaliacao(l, function () {
       carregarLojas();
-    } catch (erro) {
-      mostrarMensagem(msg, erro.erro, "erro");
-    }
+      mostrarConta();
+    });
   });
-  return form;
+  caixa.appendChild(abrir);
+  return caixa;
 }
 
 function montarCapa(l) {

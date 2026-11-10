@@ -41,6 +41,8 @@
         <button type="button" class="item" data-abrir="evento"><span class="icone-caixa"><i data-icone="calendario"></i></span>Anunciar evento</button>
         <button type="button" class="item" data-abrir="avaliacoes"><span class="icone-caixa"><i data-icone="estrela"></i></span>Avaliações</button>
         <button type="button" class="item" data-abrir="estatisticas"><span class="icone-caixa"><i data-icone="grafico"></i></span>Estatísticas</button>
+        <button type="button" class="item" data-abrir="promocoes"><span class="icone-caixa"><i data-icone="presente"></i></span>Promoções</button>
+        <button type="button" class="item" data-abrir="validar"><span class="icone-caixa"><i data-icone="check"></i></span>Validar voucher</button>
         <button type="button" class="item item-largo" data-abrir="dados"><span class="icone-caixa"><i data-icone="lapis"></i></span>Dados e localização da loja</button>
       </div>
     </section>
@@ -154,6 +156,64 @@
 
       <h3>Últimas reservas</h3>
       <div id="lista-pedidos"></div>
+    </section>
+
+    <!-- PROMOÇÕES -->
+    <section id="promocoes" class="secao oculto">
+      <h1>Promoções</h1>
+      <p class="dica-form">Ofereça benefícios que os clientes trocam por pontos. O cliente recebe um código único, que você valida no balcão.</p>
+      <form id="form-promocao" class="cartao" novalidate>
+        <label for="pr-titulo" style="margin-top: 0">Nome da promoção</label>
+        <input type="text" id="pr-titulo" maxlength="80">
+        <label for="pr-descricao">Descrição</label>
+        <textarea id="pr-descricao" maxlength="300"></textarea>
+        <label for="pr-tipo">Tipo de benefício</label>
+        <select id="pr-tipo">
+          <option value="percentual">Desconto percentual</option>
+          <option value="valor_fixo">Desconto em valor fixo</option>
+          <option value="brinde">Brinde</option>
+          <option value="especial">Promoção especial</option>
+          <option value="outro">Outro</option>
+        </select>
+        <div id="pr-valor-caixa">
+          <label for="pr-valor" id="pr-valor-rotulo">Percentual (1 a 100)</label>
+          <input type="number" id="pr-valor" step="0.01" min="0">
+        </div>
+        <label for="pr-pontos">Pontos necessários</label>
+        <input type="number" id="pr-pontos" min="1" inputmode="numeric">
+        <label for="pr-qtd">Quantidade de vouchers</label>
+        <input type="number" id="pr-qtd" min="1" inputmode="numeric">
+        <label for="pr-limite">Limite por cliente</label>
+        <input type="number" id="pr-limite" min="1" value="1" inputmode="numeric">
+        <label for="pr-inicio">Início</label>
+        <input type="date" id="pr-inicio">
+        <label for="pr-fim">Encerramento</label>
+        <input type="date" id="pr-fim">
+        <label for="pr-cond">Condições (opcional)</label>
+        <textarea id="pr-cond" maxlength="500" placeholder="Ex.: válido de segunda a quinta, não cumulativo"></textarea>
+        <p id="mensagem-promocao" class="mensagem oculto" role="status"></p>
+        <button type="submit" class="botao cadastrar">Publicar promoção</button>
+      </form>
+      <h3>Minhas promoções</h3>
+      <div id="lista-promocoes"></div>
+    </section>
+
+    <!-- VALIDAR VOUCHER -->
+    <section id="validar" class="secao oculto">
+      <h1>Validar voucher</h1>
+      <p class="dica-form">Peça o código ao cliente (formato NORD-XXXX-XXXX). Cada voucher vale uma vez só.</p>
+      <form id="form-validar" class="cartao" novalidate>
+        <label for="vc-codigo" style="margin-top: 0">Código do voucher</label>
+        <input type="text" id="vc-codigo" autocomplete="off" autocapitalize="characters" placeholder="NORD-XXXX-XXXX">
+        <div class="botoes-linha">
+          <button type="button" class="botao contorno" id="vc-consultar">Consultar</button>
+          <button type="submit" class="botao">Validar e dar baixa</button>
+        </div>
+        <p id="mensagem-voucher" class="mensagem oculto" role="status"></p>
+        <div id="vc-resultado"></div>
+      </form>
+      <h3>Vouchers da loja</h3>
+      <div id="lista-vouchers"></div>
     </section>
 
     <!-- DADOS DA LOJA -->

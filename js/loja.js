@@ -75,6 +75,8 @@ function abrirSecao(id) {
   if (id == "avaliacoes") mostrarAvaliacoes();
   if (id == "estatisticas") mostrarEstatisticas();
   if (id == "dados") mostrarDados();
+  if (id == "promocoes") mostrarPromocoes();
+  if (id == "validar") mostrarVouchers();
 }
 
 document.addEventListener("click", function (e) {
@@ -406,3 +408,149 @@ formDados.addEventListener("submit", async function (e) {
 });
 
 mostrarResumo();
+
+
+// ---------- promoções e vouchers ----------
+const ESTADOS_PROMO = { ativa: "Ativa", pausada: "Pausada", encerrada: "Encerrada" };
+
+function limparErrosPromo() {
+  document.querySelectorAll("#form-promocao .erro-campo").forEach(function (e) { e.remove(); });
+}
+
+pegarId("pr-tipo").addEventListener("change", function () {
+  const t = this.value;
+  pegarId("pr-valor-caixa").classList.toggle("oculto", t != "percentual" && t != "valor_fixo");
+  pegarId("pr-valor-rotulo").textContent = t == "percentual" ? "Percentual (1 a 100)" : "Valor do desconto (R$)";
+});
+
+async function mostrarPromocoes() {
+  const hoje = new Date().toISOString().slice(0, 10);
+  if (!pegarId("pr-inicio").value) pegarId("pr-inicio").value = hoje;
+  const lista = pegarId("lista-promocoes");
+  try {
+    const d = await api("GET", "/api/minha-loja/promocoes");
+    lista.innerHTML = "";
+    if (!d.promocoes.length) {
+      const v = criar("div", "estado-vazio");
+      v.appendChild(criar("strong", "", "Nenhuma promoção ainda"));
+      v.appendChild(criar("span", "", "Crie a primeira acima para os clientes trocarem pontos por benefícios na sua loja."));
+      lista.appendChild(v);
+      return;
+    }
+    d.promocoes.forEach(function (p) {
+      const el = criar("article", "cartao promo");
+      el.appendChild(criar("strong", "", p.titulo + " · " + p.beneficio));
+      el.appendChild(criar("p", "", p.pontos + " pontos · " + ESTADOS_PROMO[p.status] + " · até " + dataBR(p.validade)));
+      el.appendChild(criar("p", "recompensa-meta", "Disponíveis " + (p.quantidade_total - p.resgatados) + " de " + p.quantidade_total + " · resgatados " + p.resgatados + " · utilizados " + p.utilizados + " · expirados " + p.expirados + " · cancelados " + p.cancelados));
+      if (p.status != "encerrada") {
+        const bt = criar("div", "botoes-linha");
+        const alternar = criar("button", "botao contorno", p.status == "ativa" ? "Pausar" : "Ativar");
+        alternar.type = "button";
+        alternar.addEventListener("click", async function () {
+          try { await api("PATCH", "/api/minha-loja/promocoes/" + p.id, { status: p.status == "ativa" ? "pausada" : "ativa" }); mostrarPromocoes(); } catch (e) { mostrarMensagem(pegarId("mensagem-promocao"), e.erro, "erro"); }
+        });
+        const encerrar = criar("button", "botao contorno", "Encerrar");
+        encerrar.type = "button";
+        encerrar.addEventListener("click", async function () {
+          if (!confirm("Encerrar esta promoção? Vouchers já resgatados continuam valendo.")) return;
+          try { await api("PATCH", "/api/minha-loja/promocoes/" + p.id, { status: "encerrada" }); mostrarPromocoes(); } catch (e) { mostrarMensagem(pegarId("mensagem-promocao"), e.erro, "erro"); }
+        });
+        bt.appendChild(alternar);
+        bt.appendChild(encerrar);
+        el.appendChild(bt);
+      }
+      lista.appendChild(el);
+    });
+  } catch (e) {}
+}
+
+pegarId("form-promocao").addEventListener("submit", async function (ev) {
+  ev.preventDefault();
+  limparErrosPromo();
+  const ids = { titulo: "pr-titulo", descricao: "pr-descricao", tipo_beneficio: "pr-tipo", valor_beneficio: "pr-valor", pontos_necessarios: "pr-pontos", quantidade_total: "pr-qtd", limite_por_usuario: "pr-limite", inicio: "pr-inicio", fim: "pr-fim", condicoes: "pr-cond" };
+  const corpo = {};
+  Object.keys(ids).forEach(function (k) { corpo[k] = pegarId(ids[k]).value; });
+  const msgP = pegarId("mensagem-promocao");
+  try {
+    await api("POST", "/api/minha-loja/promocoes", corpo);
+    mostrarMensagem(msgP, "Promoção publicada.", "ok");
+    ["pr-titulo", "pr-descricao", "pr-valor", "pr-pontos", "pr-qtd", "pr-fim", "pr-cond"].forEach(function (i) { pegarId(i).value = ""; });
+    mostrarPromocoes();
+  } catch (e) {
+    mostrarMensagem(msgP, e.erro, "erro");
+    Object.keys(e.campos || {}).forEach(function (k) {
+      const campo = pegarId(ids[k]);
+      if (campo) campo.insertAdjacentElement("afterend", criar("small", "erro-campo", e.campos[k]));
+    });
+  }
+});
+
+async function mostrarVouchers() {
+  const lista = pegarId("lista-vouchers");
+  try {
+    const d = await api("GET", "/api/minha-loja/vouchers");
+    lista.innerHTML = "";
+    if (!d.vouchers.length) {
+      const v = criar("div", "estado-vazio");
+      v.appendChild(criar("strong", "", "Nenhum voucher resgatado ainda"));
+      v.appendChild(criar("span", "", "Quando um cliente resgatar uma promoção, o voucher aparece aqui."));
+      lista.appendChild(v);
+      return;
+    }
+    d.vouchers.forEach(function (v) {
+      const el = criar("div", "voucher-item estado-" + v.estado);
+      const esq = criar("div", "");
+      esq.appendChild(criar("strong", "", v.codigo));
+      esq.appendChild(criar("small", "", v.titulo + " · " + v.cliente));
+      el.appendChild(esq);
+      el.appendChild(criar("span", "selo-estado", v.estado_rotulo));
+      if (v.estado == "resgatado") {
+        const c = criar("button", "mini-botao", "Cancelar");
+        c.type = "button";
+        c.addEventListener("click", async function () {
+          if (!confirm("Cancelar este voucher? Os pontos voltam para o cliente.")) return;
+          try { await api("POST", "/api/minha-loja/vouchers/" + v.id + "/cancelar"); mostrarVouchers(); } catch (e) { mostrarMensagem(pegarId("mensagem-voucher"), e.erro, "erro"); }
+        });
+        el.appendChild(c);
+      }
+      lista.appendChild(el);
+    });
+  } catch (e) {}
+}
+
+function mostrarResultadoVoucher(v, textoOk) {
+  const r = pegarId("vc-resultado");
+  r.innerHTML = "";
+  const caixa = criar("div", "cartao estado-" + v.estado);
+  caixa.appendChild(criar("strong", "", v.titulo));
+  [["Benefício", v.beneficio], ["Cliente", v.cliente], ["Estado", v.estado_rotulo], ["Válido até", dataBR(v.validade)]].forEach(function (p) {
+    const l = criar("div", "dado-linha");
+    l.appendChild(criar("span", "", p[0]));
+    l.appendChild(criar("span", "", p[1]));
+    caixa.appendChild(l);
+  });
+  r.appendChild(caixa);
+}
+
+pegarId("vc-consultar").addEventListener("click", async function () {
+  const m = pegarId("mensagem-voucher");
+  pegarId("vc-resultado").innerHTML = "";
+  try {
+    const d = await api("GET", "/api/minha-loja/vouchers/consultar?codigo=" + encodeURIComponent(pegarId("vc-codigo").value));
+    mostrarResultadoVoucher(d.voucher);
+    m.classList.add("oculto");
+  } catch (e) { mostrarMensagem(m, e.erro, "erro"); }
+});
+
+pegarId("form-validar").addEventListener("submit", async function (ev) {
+  ev.preventDefault();
+  const m = pegarId("mensagem-voucher");
+  pegarId("vc-resultado").innerHTML = "";
+  try {
+    const d = await api("POST", "/api/minha-loja/vouchers/validar", { codigo: pegarId("vc-codigo").value });
+    mostrarMensagem(m, "Voucher validado. Dê o benefício ao cliente.", "ok");
+    mostrarResultadoVoucher(d.voucher);
+    pegarId("vc-codigo").value = "";
+    mostrarVouchers();
+  } catch (e) { mostrarMensagem(m, e.erro, "erro"); }
+});

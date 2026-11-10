@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minha carteira - Nordestinando</title>
+  <script src="../js/tema.js"></script>
+  <link rel="stylesheet" href="../style/style.css">
+</head>
+<body>
+  <main class="tela pagina-conta">
+    <div class="cabeca">
+      <a class="voltar-link" href="explorar.html" aria-label="Voltar"><i data-icone="voltar"></i></a>
+      <h1>Minha carteira</h1>
+    </div>
+
+    <section class="saldo-card" aria-live="polite">
+      <div class="saldo-topo">
+        <span class="saldo-rotulo">Pontos disponíveis</span>
+        <a class="selo-plano" id="selo-plano" href="premium.html">Plano gratuito</a>
+      </div>
+      <strong class="saldo-numero" id="saldo">…</strong>
+      <div class="nivel">
+        <div class="nivel-linha"><span id="nivel-nome"></span><span id="nivel-prox"></span></div>
+        <div class="barra" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="barra"><span id="barra-preench"></span></div>
+      </div>
+      <div class="saldo-resumo">
+        <div><strong id="t-ganho">0</strong><span>ganhos</span></div>
+        <div><strong id="t-usado">0</strong><span>usados</span></div>
+        <div><strong id="t-bonus">0</strong><span>bônus Nordestinando+</span></div>
+      </div>
+    </section>
+
+    <div class="abas" role="tablist">
+      <button class="aba" role="tab" id="aba-recompensas" aria-selected="true">Recompensas</button>
+      <button class="aba" role="tab" id="aba-vouchers" aria-selected="false">Meus vouchers</button>
+      <button class="aba" role="tab" id="aba-extrato" aria-selected="false">Extrato</button>
+    </div>
+    <div class="chips oculto" id="filtro-extrato"></div>
+
+    <p id="mensagem" class="mensagem oculto" role="status"></p>
+    <div id="lista" aria-live="polite"></div>
+    <dialog id="dialogo-voucher" aria-labelledby="voucher-titulo"></dialog>
+  </main>
+  <script src="../js/icones.js"></script>
+  <script src="../js/comum.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/conta-ui.js"></script>
+  <script src="../js/carteira.js"></script>
+</body>
+</html>

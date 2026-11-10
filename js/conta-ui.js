@@ -6,6 +6,20 @@ function montarAcoesTopo(container, usuario) {
   container.innerHTML = "";
   container.className = "acoes-topo";
 
+  if (usuario.perfil == "CLIENTE") {
+    const moedas = criar("a", "chip-pontos oculto");
+    moedas.href = "carteira.html";
+    moedas.appendChild(icone("moeda"));
+    const num = criar("span", "", "0");
+    moedas.appendChild(num);
+    moedas.setAttribute("aria-label", "Minha carteira de pontos");
+    container.appendChild(moedas);
+    api("GET", "/api/carteira").then(function (d) {
+      num.textContent = d.carteira.saldo;
+      moedas.classList.remove("oculto");
+    }, function () {});
+  }
+
   const sino = criar("a", "icone-botao");
   sino.href = "notificacoes.html";
   sino.setAttribute("aria-label", "Notificações");

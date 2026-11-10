@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nordestinando+ - Nordestinando</title>
+  <script src="../js/tema.js"></script>
+  <link rel="stylesheet" href="../style/style.css">
+</head>
+<body>
+  <main class="tela pagina-conta">
+    <div class="cabeca">
+      <a class="voltar-link" href="carteira.html" aria-label="Voltar"><i data-icone="voltar"></i></a>
+      <h1>Nordestinando+</h1>
+    </div>
+
+    <section class="premium-card">
+      <p class="premium-preco"><strong id="preco">R$ 5,90</strong> <span>por mês</span></p>
+      <p class="premium-destaque">Ganhe o dobro de pontos em cada avaliação.</p>
+      <ul class="premium-lista">
+        <li>Pontos em dobro (2x) nas avaliações que valem pontos.</li>
+        <li>Mais pontos significam recompensas das lojas parceiras mais cedo.</li>
+        <li>Seus pontos e vouchers continuam seus se você cancelar.</li>
+        <li>Cancele quando quiser, sem multa.</li>
+      </ul>
+      <div class="premium-exemplo" id="exemplo"></div>
+    </section>
+
+    <section class="cartao" id="estado-plano" aria-live="polite"></section>
+    <p id="mensagem" class="mensagem oculto" role="status"></p>
+    <div class="botoes-linha" id="acoes"></div>
+    <p class="premium-aviso" id="aviso"></p>
+  </main>
+  <script src="../js/icones.js"></script>
+  <script src="../js/comum.js"></script>
+  <script src="../js/api.js"></script>
+  <script src="../js/premium.js"></script>
+</body>
+</html>

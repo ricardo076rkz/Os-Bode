@@ -34,5 +34,13 @@ def criar_tabelas():
         con.execute("ALTER TABLE usuario ADD COLUMN avatar TEXT")
     if "preferencias" not in colunas:
         con.execute("ALTER TABLE usuario ADD COLUMN preferencias TEXT NOT NULL DEFAULT '{}'")
+    # avaliações com critérios, dica, foto e controle de pontos
+    colunas = {c[1] for c in con.execute("PRAGMA table_info(avaliacao)")}
+    for nome, tipo in (
+        ("crit_atendimento", "INTEGER"), ("crit_qualidade", "INTEGER"), ("crit_preco", "INTEGER"), ("crit_ambiente", "INTEGER"),
+        ("dica", "TEXT"), ("consumiu", "TEXT"), ("foto", "TEXT"), ("pontos_base_concedidos", "INTEGER NOT NULL DEFAULT 0"),
+    ):
+        if nome not in colunas:
+            con.execute("ALTER TABLE avaliacao ADD COLUMN %s %s" % (nome, tipo))
     con.commit()
     con.close()

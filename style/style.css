@@ -1243,3 +1243,70 @@ dialog#detalhe-evento .botoes-linha { margin-top: 16px; }
 }
 .hero .esqueci { display: block; margin-top: 14px; text-align: left; }
 .topo { padding-top: 26px; }
+
+/* ---------- gamificação: pontos, carteira, vouchers, Nordestinando+ ---------- */
+.chip-pontos { display: inline-flex; align-items: center; gap: 5px; height: 40px; padding: 0 12px; border-radius: 999px; background: var(--cor-destaque-suave); color: var(--cor-destaque-forte); font-weight: 800; font-size: 0.9rem; text-decoration: none; border: 1.5px solid var(--cor-destaque); }
+.chip-pontos [data-icone] { width: 18px; height: 18px; }
+.saldo-card { margin-top: 14px; padding: 20px; border-radius: var(--raio); background: var(--cor-principal); color: var(--sobre-principal); }
+.saldo-topo { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.saldo-rotulo { font-size: 0.9rem; opacity: 0.85; }
+.selo-plano { padding: 5px 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.16); color: inherit; font-size: 0.8rem; font-weight: 700; text-decoration: none; }
+.selo-plano.premium { background: var(--cor-destaque); color: #2a1800; }
+.saldo-numero { display: block; margin: 4px 0 14px; font-size: 3rem; line-height: 1; font-weight: 800; }
+.nivel-linha { display: flex; justify-content: space-between; gap: 8px; font-size: 0.85rem; margin-bottom: 6px; }
+.barra { height: 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.22); overflow: hidden; }
+.barra span { display: block; height: 100%; width: 0; background: var(--cor-destaque); border-radius: 999px; transition: width 0.4s; }
+.saldo-resumo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; text-align: center; }
+.saldo-resumo strong { display: block; font-size: 1.2rem; }
+.saldo-resumo span { font-size: 0.72rem; opacity: 0.85; }
+.recompensa, .voucher-item, .movimento { margin-top: 12px; padding: 14px; border: 1.5px solid var(--borda); border-radius: var(--raio); background: var(--superficie); }
+.recompensa h3 { margin: 8px 0 2px; font-size: 1.05rem; }
+.recompensa p { margin: 4px 0; }
+.recompensa .botao { margin-top: 10px; }
+.recompensa-topo { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.selo-beneficio { padding: 4px 10px; border-radius: 999px; background: var(--cor-sucesso-suave, var(--fundo-sutil)); color: var(--cor-sucesso, var(--texto)); font-weight: 800; font-size: 0.82rem; }
+.recompensa-custo { font-weight: 800; color: var(--cor-destaque-forte); }
+.recompensa-loja, .recompensa-meta { color: var(--texto-suave); font-size: 0.88rem; }
+.voucher-item, .movimento { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; font: inherit; color: inherit; text-align: left; }
+button.voucher-item { cursor: pointer; }
+.voucher-item small, .movimento small { display: block; color: var(--texto-suave); }
+.selo-estado { padding: 4px 10px; border-radius: 999px; background: var(--fundo-sutil); font-size: 0.78rem; font-weight: 700; white-space: nowrap; }
+.estado-resgatado .selo-estado { background: var(--cor-sucesso-suave, var(--fundo-sutil)); color: var(--cor-sucesso, inherit); }
+.estado-utilizado, .estado-expirado, .estado-cancelado { opacity: 0.7; }
+.movimento-valor { text-align: right; }
+.movimento-valor.mais strong { color: var(--cor-sucesso, inherit); }
+.movimento-valor.menos strong { color: var(--cor-erro, inherit); }
+dialog#dialogo-voucher, dialog#dialogo-avaliar { width: min(520px, calc(100% - 24px)); max-height: 90vh; margin: auto; padding: 20px; border: 0; border-radius: 20px; background: var(--superficie); color: var(--texto); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35); overflow-y: auto; }
+dialog#dialogo-voucher::backdrop, dialog#dialogo-avaliar::backdrop { background: rgba(15, 12, 30, 0.55); }
+.voucher-codigo { margin: 12px 0; padding: 16px; text-align: center; font-size: 1.6rem; font-weight: 800; letter-spacing: 0.08em; border: 2px dashed var(--cor-principal); border-radius: var(--raio); user-select: all; }
+.voucher-ajuda, .voucher-loja { color: var(--texto-suave); font-size: 0.9rem; }
+.form-avaliar h2 { margin: 0 0 8px; }
+.campo-aval { margin-top: 12px; }
+.campo-aval label, .rotulo-crit { display: block; font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; }
+.campo-aval input, .campo-aval textarea { width: 100%; }
+.criterios { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+.estrelas-escolha { display: flex; gap: 2px; }
+.estrela-botao { width: 36px; height: 36px; border: 0; background: none; font-size: 1.6rem; line-height: 1; color: var(--borda); cursor: pointer; padding: 0; }
+.estrela-botao.cheia { color: var(--cor-destaque); }
+.estrela-botao:focus-visible { outline: 3px solid var(--cor-principal); border-radius: 8px; }
+.dica-form { color: var(--texto-suave); font-size: 0.88rem; margin: 10px 0 0; }
+.previa-foto { max-width: 100%; max-height: 160px; margin-top: 8px; border-radius: 12px; }
+.estimativa { margin-top: 16px; padding: 12px 14px; border-radius: var(--raio); background: var(--fundo-sutil); display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.estimativa:empty { display: none; }
+.est-total { flex-basis: 100%; font-size: 1.05rem; color: var(--cor-principal); }
+.est-item { padding: 3px 9px; border-radius: 999px; background: var(--superficie); border: 1px solid var(--borda); font-size: 0.8rem; }
+.est-item.premium { border-color: var(--cor-destaque); color: var(--cor-destaque-forte); font-weight: 700; }
+.est-aviso { margin: 0; font-size: 0.9rem; }
+.estimativa small { flex-basis: 100%; color: var(--texto-suave); }
+.est-link { flex-basis: 100%; font-size: 0.85rem; color: var(--cor-principal); font-weight: 700; }
+.confirmacao { text-align: center; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.conf-pontos { margin: 0; font-size: 2.6rem; font-weight: 800; color: var(--cor-destaque-forte); }
+.premium-card { margin-top: 14px; padding: 20px; border-radius: var(--raio); background: var(--cor-principal); color: var(--sobre-principal); }
+.premium-preco { margin: 0; } .premium-preco strong { font-size: 2.4rem; }
+.premium-destaque { font-size: 1.1rem; font-weight: 700; margin: 6px 0 10px; }
+.premium-lista { padding-left: 18px; margin: 0 0 12px; }
+.premium-exemplo { padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.16); font-size: 0.9rem; }
+.premium-aviso { margin: 12px 0 0; padding: 10px 12px; border-radius: 12px; background: var(--fundo-sutil); color: var(--texto-suave); font-size: 0.85rem; }
+.premium-aviso:empty { display: none; }
+.promo { margin-top: 12px; }
+@media (max-width: 420px) { .criterios { grid-template-columns: 1fr; } }

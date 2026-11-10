@@ -22,6 +22,7 @@ load_dotenv(os.path.join(RAIZ, ".env"))
 import banco  # noqa: E402  (precisa vir depois do load_dotenv por causa do DB_PATH)
 import agenda  # noqa: E402
 import conta  # noqa: E402
+import gamificacao  # noqa: E402
 
 app = Flask(__name__, static_folder=None)
 
@@ -503,19 +504,33 @@ def avaliar(usuario, id_loja):
     db = banco.conexao()
     if not db.execute("SELECT 1 FROM loja WHERE id_loja = ?", (id_loja,)).fetchone():
         raise ErroApi("Loja não encontrada.", status=404)
-    db.execute(
-        """INSERT INTO avaliacao (id_cliente, id_loja, nota, comentario) VALUES (?, ?, ?, ?)
-           ON CONFLICT (id_cliente, id_loja)
-           DO UPDATE SET nota = excluded.nota, comentario = excluded.comentario, data_criacao = CURRENT_DATE""",
-        (usuario["id_usuario"], id_loja, nota, texto(d, "comentario", 300)),
-    )
-    dono = db.execute("SELECT id_logista, nome_fantasia FROM loja WHERE id_loja = ?", (id_loja,)).fetchone()
-    anonimo = not conta.preferencias_de(usuario)["privacidade"]["nome_nas_avaliacoes"]
-    quem = "Um cliente" if anonimo else usuario["nome"].split()[0]
-    conta.notificar(dono["id_logista"], "avaliacoes", "Nova avaliação: %d de 5" % nota, "%s avaliou %s." % (quem, dono["nome_fantasia"]), "minha_loja.html")
-    conta.registrar_atividade(usuario["id_usuario"], "Avaliou uma loja", "%s: %d de 5" % (dono["nome_fantasia"], nota))
-    db.commit()
-    return jsonify({"ok": True}), 201
+    antiga = db.execute("SELECT * FROM avaliacao WHERE id_cliente = ? AND id_loja = ?", (usuario["id_usuario"], id_loja)).fetchone()
+    ex = gamificacao.ler_extras(d, _aj, antiga)
+    try:
+        gamificacao.iniciar_escrita(db)
+        foto = ex["foto_nova"] if ex["foto_nova"] else (antiga["foto"] if antiga else None)
+        db.execute(
+            """INSERT INTO avaliacao (id_cliente, id_loja, nota, comentario, crit_atendimento, crit_qualidade, crit_preco, crit_ambiente, dica, consumiu, foto)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+               ON CONFLICT (id_cliente, id_loja)
+               DO UPDATE SET nota = excluded.nota, comentario = excluded.comentario, crit_atendimento = excluded.crit_atendimento,
+                 crit_qualidade = excluded.crit_qualidade, crit_preco = excluded.crit_preco, crit_ambiente = excluded.crit_ambiente,
+                 dica = excluded.dica, consumiu = excluded.consumiu, foto = excluded.foto, data_criacao = CURRENT_DATE""",
+            (usuario["id_usuario"], id_loja, nota, ex["comentario"], ex["criterios"].get("atendimento"), ex["criterios"].get("qualidade"),
+             ex["criterios"].get("preco"), ex["criterios"].get("ambiente"), ex["dica"], ex["consumiu"], foto),
+        )
+        linha = db.execute("SELECT * FROM avaliacao WHERE id_cliente = ? AND id_loja = ?", (usuario["id_usuario"], id_loja)).fetchone()
+        ganho = gamificacao.conceder_pontos_avaliacao(db, usuario, id_loja, linha["id_avaliacao"], linha, linha["pontos_base_concedidos"])
+        dono = db.execute("SELECT id_logista, nome_fantasia FROM loja WHERE id_loja = ?", (id_loja,)).fetchone()
+        anonimo = not conta.preferencias_de(usuario)["privacidade"]["nome_nas_avaliacoes"]
+        quem = "Um cliente" if anonimo else usuario["nome"].split()[0]
+        conta.notificar(dono["id_logista"], "avaliacoes", "Nova avaliação: %d de 5" % nota, "%s avaliou %s." % (quem, dono["nome_fantasia"]), "minha_loja.html")
+        conta.registrar_atividade(usuario["id_usuario"], "Avaliou uma loja", "%s: %d de 5" % (dono["nome_fantasia"], nota))
+        db.commit()
+    except BaseException:
+        db.rollback()
+        raise
+    return jsonify({"ok": True, "ganho": ganho}), 201
 
 
 @app.post("/api/lojas/<int:id_loja>/pedidos")
@@ -744,6 +759,7 @@ for _nome, _valor in dict(ErroApi=ErroApi, dados_json=dados_json, texto=texto, s
     setattr(_aj, _nome, _valor)
 conta.registrar_rotas(app, _aj)
 agenda.registrar_rotas(app)
+gamificacao.registrar_rotas(app, _aj)
 
 
 if __name__ == "__main__":

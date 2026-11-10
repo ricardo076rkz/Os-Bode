@@ -1,0 +1,25 @@
+{
+  "_ajuda": "Regras de pontuação. Mude os números aqui e reinicie o servidor: não precisa mexer no código. A nota (positiva ou negativa) NUNCA entra na conta.",
+  "base_avaliacao_valida": 10,
+  "pontos_por_criterio": 3,
+  "criterios": ["atendimento", "qualidade", "preco", "ambiente"],
+  "faixas_comentario": [
+    { "min_caracteres": 20, "pontos": 5, "rotulo": "Comentário" },
+    { "min_caracteres": 80, "pontos": 10, "rotulo": "Comentário detalhado" },
+    { "min_caracteres": 200, "pontos": 15, "rotulo": "Comentário completo" }
+  ],
+  "dica": { "min_caracteres": 10, "pontos": 5 },
+  "consumiu": { "min_caracteres": 3, "pontos": 3 },
+  "foto": { "pontos": 10 },
+  "minimo_para_pontuar": { "criterios": 2, "comentario_min_caracteres": 20 },
+  "limite_diario_avaliacoes_pontuadas": 5,
+  "multiplicador_premium": 2,
+  "premium": { "preco_centavos": 590, "dias_periodo": 30 },
+  "validade_voucher_dias_padrao": 30,
+  "niveis": [
+    { "nome": "Explorador", "min_pontos": 0 },
+    { "nome": "Viajante", "min_pontos": 100 },
+    { "nome": "Conhecedor", "min_pontos": 300 },
+    { "nome": "Anfitrião", "min_pontos": 700 }
+  ]
+}

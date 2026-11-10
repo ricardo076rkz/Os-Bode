@@ -150,3 +150,90 @@ CREATE TABLE IF NOT EXISTS evento_cidade (
     foto        TEXT,                    -- endereço ou data URL da foto (quando houver autorização/procedência)
     ativo       INTEGER NOT NULL DEFAULT 1
 );
+
+-- ---------------------------------------------------------------- gamificação, vouchers e Nordestinando+
+-- carteira de pontos (o saldo SEMPRE vive aqui, no servidor; nunca no navegador)
+CREATE TABLE IF NOT EXISTS carteira (
+    id_usuario  INTEGER PRIMARY KEY REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    saldo       INTEGER NOT NULL DEFAULT 0 CHECK (saldo >= 0),
+    total_ganho INTEGER NOT NULL DEFAULT 0,
+    total_usado INTEGER NOT NULL DEFAULT 0
+);
+
+-- razão: toda movimentação de pontos fica registrada. "chave" é única e impede recompensa em duplicidade.
+CREATE TABLE IF NOT EXISTS movimento_pontos (
+    id_movimento  INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario    INTEGER NOT NULL REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    tipo          TEXT NOT NULL CHECK (tipo IN ('avaliacao', 'resgate', 'estorno')),
+    pontos        INTEGER NOT NULL,            -- com sinal: ganho (+) ou uso (-)
+    pontos_base   INTEGER NOT NULL DEFAULT 0,  -- antes do multiplicador
+    pontos_bonus  INTEGER NOT NULL DEFAULT 0,  -- parte vinda do Premium
+    multiplicador INTEGER NOT NULL DEFAULT 1,
+    descricao     TEXT NOT NULL,
+    id_loja       INTEGER REFERENCES loja(id_loja) ON DELETE SET NULL,
+    id_avaliacao  INTEGER REFERENCES avaliacao(id_avaliacao) ON DELETE SET NULL,
+    id_voucher    INTEGER,
+    chave         TEXT NOT NULL UNIQUE,
+    saldo_apos    INTEGER NOT NULL,
+    criado_em     TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_movimento_usuario ON movimento_pontos (id_usuario, id_movimento);
+
+CREATE TABLE IF NOT EXISTS promocao (
+    id_promocao          INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_loja              INTEGER NOT NULL REFERENCES loja(id_loja) ON DELETE CASCADE,
+    titulo               TEXT NOT NULL,
+    descricao            TEXT NOT NULL,
+    tipo_beneficio       TEXT NOT NULL CHECK (tipo_beneficio IN ('percentual', 'valor_fixo', 'brinde', 'especial', 'outro')),
+    valor_beneficio      REAL,
+    pontos_necessarios   INTEGER NOT NULL CHECK (pontos_necessarios > 0),
+    quantidade_total     INTEGER NOT NULL CHECK (quantidade_total > 0),
+    quantidade_resgatada INTEGER NOT NULL DEFAULT 0,
+    limite_por_usuario   INTEGER NOT NULL DEFAULT 1 CHECK (limite_por_usuario > 0),
+    inicio               TEXT NOT NULL,
+    fim                  TEXT NOT NULL,
+    condicoes            TEXT NOT NULL DEFAULT '',
+    status               TEXT NOT NULL DEFAULT 'ativa' CHECK (status IN ('ativa', 'pausada', 'encerrada')),
+    criada_em            TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CHECK (quantidade_resgatada <= quantidade_total)
+);
+
+CREATE TABLE IF NOT EXISTS voucher (
+    id_voucher    INTEGER PRIMARY KEY AUTOINCREMENT,
+    codigo        TEXT NOT NULL UNIQUE,
+    id_promocao   INTEGER NOT NULL REFERENCES promocao(id_promocao) ON DELETE CASCADE,
+    id_usuario    INTEGER NOT NULL REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    pontos_gastos INTEGER NOT NULL,
+    status        TEXT NOT NULL DEFAULT 'resgatado' CHECK (status IN ('resgatado', 'utilizado', 'cancelado')),
+    validade      TEXT NOT NULL,
+    resgatado_em  TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    utilizado_em  TEXT,
+    validado_por  INTEGER REFERENCES usuario(id_usuario) ON DELETE SET NULL
+);
+CREATE INDEX IF NOT EXISTS idx_voucher_usuario ON voucher (id_usuario);
+CREATE INDEX IF NOT EXISTS idx_voucher_promocao ON voucher (id_promocao);
+
+-- assinatura Nordestinando+ (o estado "expirada" é calculado pela data de fim)
+CREATE TABLE IF NOT EXISTS assinatura (
+    id_assinatura   INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_usuario      INTEGER NOT NULL REFERENCES usuario(id_usuario) ON DELETE CASCADE,
+    status          TEXT NOT NULL CHECK (status IN ('ativa', 'cancelada')),
+    inicio          TEXT NOT NULL,
+    fim             TEXT NOT NULL,
+    valor_centavos  INTEGER NOT NULL,
+    ambiente        TEXT NOT NULL CHECK (ambiente IN ('demo', 'producao')),
+    criada_em       TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    cancelada_em    TEXT
+);
+CREATE INDEX IF NOT EXISTS idx_assinatura_usuario ON assinatura (id_usuario, id_assinatura);
+
+-- pagamentos: só 'confirmado' (vindo do gateway) conta como receita. 'demo' é simulação identificada.
+CREATE TABLE IF NOT EXISTS pagamento (
+    id_pagamento       INTEGER PRIMARY KEY AUTOINCREMENT,
+    id_assinatura      INTEGER NOT NULL REFERENCES assinatura(id_assinatura) ON DELETE CASCADE,
+    valor_centavos     INTEGER NOT NULL,
+    status             TEXT NOT NULL CHECK (status IN ('pendente', 'confirmado', 'falhou', 'demo')),
+    gateway            TEXT NOT NULL,
+    referencia_externa TEXT UNIQUE,
+    criado_em          TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

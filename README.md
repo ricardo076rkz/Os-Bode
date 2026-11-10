@@ -183,3 +183,14 @@ O servidor precisa estar ligado em um computador e o celular/emulador acessa por
 Para **incluir um novo evento**, acrescente um item em `python/dados/eventos_cidade.json` (campos: `slug` único, `titulo`, `categoria`, `dia_semana`, `periodo` = manha/tarde/noite, `horario` só se confirmado, `local_nome`, `busca_mapa`, `descricao`, `detalhes`, `pendencias`, `foto`) e reinicie o servidor. Não é preciso mexer no layout.
 
 **Regra de ouro:** só entra o que está confirmado. O que ainda falta validar vai em `pendencias` e aparece como "Pendente de validação". Hoje a Feira de Frutas e Verduras (quinta, manhã) e o Motofest (quinta, noite), ambos na Estação Ferroviária, estão sem horário, programação e fotos, por isso mostram "horário a confirmar". Fotos só devem ser colocadas (campo `foto`) com procedência e autorização confirmadas.
+
+## Pontos, recompensas e Nordestinando+
+
+- **Pontos por avaliação** (calculados só no servidor, regras em `python/dados/regras_pontos.json`): avaliação válida, critérios (atendimento, qualidade, preço, ambiente), comentário detalhado, dica, o que consumiu e foto. A nota (boa ou ruim) nunca muda os pontos. Mínimo de 2 critérios ou comentário de 20 letras, limite de 5 avaliações pontuadas por dia, e reenviar só paga a diferença.
+- **Carteira** (`html/carteira.html`): saldo, nível, recompensas, vouchers e extrato (razão `movimento_pontos`, uma chave única por movimento, sem pontos em duplicidade).
+- **Promoções do comerciante** (painel da loja): cria, pausa, encerra, vê resgatados/utilizados/expirados, valida o código do voucher (uso único) e cancela (estorna os pontos).
+- **Resgate atômico**: debita pontos, baixa estoque e cria o voucher numa única transação.
+- **Nordestinando+** (R$ 5,90/mês, pontos 2x): estados gratuito, ativo, cancelado, expirado.
+- **Pagamento**: NÃO há gateway integrado. Com `PAGAMENTO_DEMO=1` a assinatura é simulada e marcada como DEMONSTRAÇÃO; sem isso o botão recusa com aviso e nada é ativado. A estrutura de produção é o webhook `POST /api/premium/webhook` (HMAC com `PAGAMENTO_WEBHOOK_SEGREDO`), idempotente por referência.
+- **Indicadores**: `GET /api/admin/gamificacao` com o cabeçalho `X-Admin-Token` (`ADMIN_TOKEN`).
+- Testes: `python tests/teste_gamificacao_api.py`.
