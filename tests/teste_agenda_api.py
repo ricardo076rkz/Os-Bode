@@ -26,9 +26,10 @@ t("categorias", set(d["categorias"]) >= {"Feira", "Motos"})
 agenda.semear()
 t("semear não duplica", len(c.get("/api/agenda").get_json()["eventos"]) == len(d["eventos"]))
 # novo evento só com uma linha no banco: aparece sem mexer em código
-con = banco.conexao()
-con.execute("INSERT INTO evento_cidade (slug, titulo, categoria, dia_semana, periodo, horario, local_nome, descricao) VALUES ('teste', 'Evento novo', 'Música', 'Sábado', 'tarde', '16:00', 'Praça', 'desc')")
-con.commit()
+with app.app.app_context():
+    con = banco.conexao()
+    con.execute("INSERT INTO evento_cidade (slug, titulo, categoria, dia_semana, periodo, horario, local_nome, descricao) VALUES ('teste', 'Evento novo', 'Música', 'Sábado', 'tarde', '16:00', 'Praça', 'desc')")
+    con.commit()
 d2 = c.get("/api/agenda").get_json()
 t("evento novo aparece", any(e["titulo"] == "Evento novo" and e["periodo_rotulo"] == "Tarde" for e in d2["eventos"]) and "Música" in d2["categorias"])
 t("ordem por dia e período", [e["dia"] for e in d2["eventos"]] == sorted([e["dia"] for e in d2["eventos"]], key=["Segunda","Terça","Quarta","Quinta","Sexta","Sábado","Domingo"].index))
