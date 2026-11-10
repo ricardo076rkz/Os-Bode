@@ -8,8 +8,7 @@
   <link rel="stylesheet" href="../style/style.css">
 </head>
 <body>
-  <main class="tela">
-    <div class="bandeirinhas"></div>
+  <main class="tela larga">
     <header class="app-topo">
       <div class="marca">
         <img class="logo" src="../js/img/logo-original.png" alt="">
@@ -34,8 +33,13 @@
     <h3>Lojas</h3>
     <div id="lista-lojas"></div>
 
-    <h3>Eventos</h3>
-    <div id="lista-eventos"></div>
+    <section id="eventos" aria-labelledby="titulo-eventos">
+      <h3 id="titulo-eventos">Agenda de Caruaru</h3>
+      <div class="chips" id="filtro-categoria" aria-label="Filtrar eventos por categoria"></div>
+      <div class="chips" id="filtro-dia" aria-label="Filtrar eventos por dia"></div>
+      <div id="lista-eventos" aria-live="polite"></div>
+    </section>
+    <dialog id="detalhe-evento" aria-labelledby="detalhe-titulo"></dialog>
 
     <div id="meus-pedidos" class="oculto">
       <h3>Minhas reservas</h3>

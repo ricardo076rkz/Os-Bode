@@ -247,40 +247,238 @@ function mostrarLojas() {
   }
 }
 
-// ---------- eventos ----------
-async function mostrarEventos() {
-  const dados = await api("GET", "/api/eventos");
-  const lista = pegarId("lista-eventos");
-  lista.innerHTML = "";
-  if (dados.eventos.length == 0) {
-    lista.appendChild(criar("p", "vazio", "Nenhum evento anunciado por enquanto."));
+// ---------- agenda de eventos (cidade + lojas) ----------
+const DIAS_LONGOS = { Segunda: "Segunda-feira", "Terça": "Terça-feira", Quarta: "Quarta-feira", Quinta: "Quinta-feira", Sexta: "Sexta-feira", "Sábado": "Sábado", Domingo: "Domingo" };
+const NOMES_DIA = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
+let agenda = [];
+let filtroCategoria = "Todos";
+let filtroDia = "Todos";
+let marcadorEvento = null;
+
+function hojeNome() {
+  return NOMES_DIA[(new Date().getDay() + 6) % 7];
+}
+
+function textoQuando(ev) {
+  return ev.dia + " · " + ev.periodo_rotulo + " · " + (ev.horario ? ev.horario : "horário a confirmar");
+}
+
+// mostra o local do evento no mapa (usa as coordenadas, ou procura o endereço pelo OpenStreetMap)
+async function verEventoNoMapa(ev) {
+  let ponto = null;
+  if (ev.latitude !== null && ev.longitude !== null) ponto = { lat: ev.latitude, lng: ev.longitude };
+  else if (ev.busca_mapa) {
+    try { ponto = await buscarEndereco(ev.busca_mapa); } catch (e) { ponto = null; }
+  }
+  pegarId("mapa").scrollIntoView({ behavior: "smooth", block: "center" });
+  if (ponto && mapa) {
+    if (marcadorEvento) marcadorEvento.remove();
+    marcadorEvento = L.marker([ponto.lat, ponto.lng], { title: ev.titulo }).addTo(mapa)
+      .bindPopup(conteudoEvento(ev));
+    mapa.setView([ponto.lat, ponto.lng], 17);
+    marcadorEvento.openPopup();
     return;
   }
-  dados.eventos.forEach(function (ev) {
-    const card = criar("div", "card evento-card");
+  // sem mapa carregado ou sem resultado: abre a busca no OpenStreetMap
+  const consulta = ev.busca_mapa || (ev.local + ", Caruaru, PE");
+  window.open("https://www.openstreetmap.org/search?query=" + encodeURIComponent(consulta), "_blank", "noopener");
+  mostrarMensagem(msg, "Abri a busca do local em outra aba.", "info");
+}
 
-    const dia = criar("div", "evento-dia");
-    dia.appendChild(criar("strong", "", ev.dia.slice(0, 3)));
-    dia.appendChild(criar("small", "", ev.horario));
-    card.appendChild(dia);
+function conteudoEvento(ev) {
+  const caixa = document.createElement("div");
+  caixa.className = "balao";
+  caixa.appendChild(criar("strong", "", ev.titulo));
+  caixa.appendChild(document.createElement("br"));
+  caixa.appendChild(document.createTextNode(ev.local));
+  return caixa;
+}
 
-    const texto = criar("div");
-    texto.appendChild(criar("h4", "", ev.nome));
-    texto.appendChild(criar("p", "detalhe", ev.dia + " às " + ev.horario + " · " + ev.loja));
-    if (ev.descricao) texto.appendChild(criar("p", "", ev.descricao));
-    if (ev.latitude !== null) {
-      const acoes = criar("div", "acoes");
-      const rota = criar("a", "mini-botao", "Como chegar");
-      rota.prepend(icone("rota"));
-      rota.href = linkRota(ev.latitude, ev.longitude);
-      rota.target = "_blank";
-      rota.rel = "noopener";
-      acoes.appendChild(rota);
-      texto.appendChild(acoes);
-    }
-    card.appendChild(texto);
-    lista.appendChild(card);
+function cartaoEvento(ev) {
+  const card = criar("article", "card evento-card2");
+
+  const faixa = criar("div", "evento-faixa periodo-" + ev.periodo);
+  faixa.appendChild(icone(ev.periodo == "manha" ? "sol" : ev.periodo == "tarde" ? "nuvem" : "estrela"));
+  faixa.appendChild(criar("span", "", ev.foto ? "" : "Foto em breve"));
+  if (ev.foto) {
+    const img = document.createElement("img");
+    img.src = ev.foto;
+    img.alt = ev.titulo;
+    img.loading = "lazy";
+    faixa.innerHTML = "";
+    faixa.appendChild(img);
+  }
+  card.appendChild(faixa);
+
+  const corpo = criar("div", "evento-corpo");
+  const marcas = criar("div", "linha-selos");
+  marcas.appendChild(criar("span", "selo-categoria", ev.categoria));
+  corpo.appendChild(marcas);
+  corpo.appendChild(criar("h4", "", ev.titulo));
+  corpo.appendChild(criar("p", "detalhe", textoQuando(ev)));
+  const onde = criar("p", "detalhe local-linha");
+  onde.appendChild(icone("pino"));
+  onde.appendChild(document.createTextNode(ev.local));
+  corpo.appendChild(onde);
+  if (ev.descricao) corpo.appendChild(criar("p", "descricao-evento", ev.descricao));
+  if (ev.pendencias.length) corpo.appendChild(criar("p", "pendente", "Algumas informações ainda serão validadas"));
+
+  const acoes = criar("div", "acoes");
+  const detalhes = criar("button", "mini-botao cheio", "Ver detalhes");
+  detalhes.type = "button";
+  detalhes.addEventListener("click", function () { abrirDetalhes(ev); });
+  acoes.appendChild(detalhes);
+  const noMapa = criar("button", "mini-botao");
+  noMapa.type = "button";
+  noMapa.appendChild(icone("pino"));
+  noMapa.appendChild(document.createTextNode("Ver no mapa"));
+  noMapa.addEventListener("click", function () { verEventoNoMapa(ev); });
+  acoes.appendChild(noMapa);
+  corpo.appendChild(acoes);
+  card.appendChild(corpo);
+  return card;
+}
+
+function abrirDetalhes(ev) {
+  const d = pegarId("detalhe-evento");
+  d.innerHTML = "";
+  const topo = criar("div", "detalhe-topo");
+  const titulo = criar("h2", "", ev.titulo);
+  titulo.id = "detalhe-titulo";
+  topo.appendChild(titulo);
+  const fechar = criar("button", "icone-botao");
+  fechar.type = "button";
+  fechar.setAttribute("aria-label", "Fechar");
+  fechar.textContent = "×";
+  fechar.addEventListener("click", function () { d.close(); });
+  topo.appendChild(fechar);
+  d.appendChild(topo);
+
+  const marcas = criar("div", "linha-selos");
+  marcas.appendChild(criar("span", "selo-periodo periodo-" + ev.periodo, ev.periodo_rotulo));
+  marcas.appendChild(criar("span", "selo-categoria", ev.categoria));
+  d.appendChild(marcas);
+
+  if (ev.descricao) d.appendChild(criar("p", "descricao-evento", ev.descricao));
+
+  const quando = criar("div", "dado-linha");
+  quando.appendChild(criar("span", "", "Quando"));
+  quando.appendChild(criar("span", "", ev.dia + ", " + ev.periodo_rotulo.toLowerCase() + (ev.horario ? " · " + ev.horario : " · horário a confirmar")));
+  d.appendChild(quando);
+  const onde = criar("div", "dado-linha");
+  onde.appendChild(criar("span", "", "Onde"));
+  onde.appendChild(criar("span", "", ev.local));
+  d.appendChild(onde);
+
+  if (ev.detalhes.length) {
+    d.appendChild(criar("h3", "", "O que você encontra"));
+    const lista = criar("ul", "lista-detalhes");
+    ev.detalhes.forEach(function (t) { lista.appendChild(criar("li", "", t)); });
+    d.appendChild(lista);
+  }
+  if (ev.pendencias.length) {
+    const caixa = criar("div", "caixa-pendente");
+    caixa.appendChild(criar("strong", "", "Pendente de validação"));
+    const lista = criar("ul", "lista-detalhes");
+    ev.pendencias.forEach(function (t) { lista.appendChild(criar("li", "", t)); });
+    caixa.appendChild(lista);
+    d.appendChild(caixa);
+  }
+
+  const acoes = criar("div", "botoes-linha");
+  const mapaBotao = criar("button", "botao", "Ver no mapa");
+  mapaBotao.type = "button";
+  mapaBotao.addEventListener("click", function () { d.close(); verEventoNoMapa(ev); });
+  acoes.appendChild(mapaBotao);
+  if (ev.id_loja) {
+    const loja = criar("button", "botao contorno", "Ver a loja");
+    loja.type = "button";
+    loja.addEventListener("click", function () {
+      d.close();
+      pegarId("busca").value = ev.local;
+      carregarLojas();
+      pegarId("lista-lojas").scrollIntoView({ behavior: "smooth" });
+    });
+    acoes.appendChild(loja);
+  }
+  d.appendChild(acoes);
+  d.showModal();
+}
+
+function desenharFiltrosEventos(dados) {
+  const cat = pegarId("filtro-categoria");
+  cat.innerHTML = "";
+  ["Todos"].concat(dados.categorias).forEach(function (c) {
+    const chip = criar("button", "chip" + (c == filtroCategoria ? " ativo" : ""), c);
+    chip.type = "button";
+    chip.addEventListener("click", function () { filtroCategoria = c; desenharFiltrosEventos(dados); desenharAgenda(); });
+    cat.appendChild(chip);
   });
+  const dia = pegarId("filtro-dia");
+  dia.innerHTML = "";
+  const diasComEvento = dados.dias.filter(function (d) { return dados.eventos.some(function (e) { return e.dia == d; }); });
+  ["Todos", "Hoje"].concat(diasComEvento).forEach(function (d) {
+    const chip = criar("button", "chip" + (d == filtroDia ? " ativo" : ""), d);
+    chip.type = "button";
+    chip.addEventListener("click", function () { filtroDia = d; desenharFiltrosEventos(dados); desenharAgenda(); });
+    dia.appendChild(chip);
+  });
+}
+
+function desenharAgenda() {
+  const lista = pegarId("lista-eventos");
+  lista.innerHTML = "";
+  const hoje = hojeNome();
+  const filtrados = agenda.filter(function (e) {
+    if (filtroCategoria != "Todos" && e.categoria != filtroCategoria) return false;
+    if (filtroDia == "Hoje") return e.dia == hoje;
+    if (filtroDia != "Todos") return e.dia == filtroDia;
+    return true;
+  });
+  if (!filtrados.length) {
+    lista.appendChild(criar("p", "vazio", filtroDia == "Hoje" ? "Nenhum evento na agenda para hoje. Veja os outros dias." : "Nenhum evento com esses filtros."));
+    return;
+  }
+  // um bloco por dia; dentro dele, manhã, tarde e noite separados
+  const porDia = {};
+  filtrados.forEach(function (e) { (porDia[e.dia] = porDia[e.dia] || []).push(e); });
+  Object.keys(porDia).forEach(function (dia) {
+    const bloco = criar("div", "agenda-dia");
+    const cab = criar("h4", "agenda-dia-titulo", DIAS_LONGOS[dia] || dia);
+    if (dia == hoje) cab.appendChild(criar("span", "selo-hoje", "hoje"));
+    bloco.appendChild(cab);
+    ["manha", "tarde", "noite"].forEach(function (periodo) {
+      const doPeriodo = porDia[dia].filter(function (e) { return e.periodo == periodo; });
+      if (!doPeriodo.length) return;
+      const secao = criar("div", "agenda-periodo");
+      secao.appendChild(criar("p", "agenda-periodo-nome periodo-" + periodo, doPeriodo[0].periodo_rotulo));
+      const grade = criar("div", "agenda-grade2");
+      doPeriodo.forEach(function (e) { grade.appendChild(cartaoEvento(e)); });
+      secao.appendChild(grade);
+      bloco.appendChild(secao);
+    });
+    lista.appendChild(bloco);
+  });
+}
+
+async function mostrarEventos() {
+  const lista = pegarId("lista-eventos");
+  lista.innerHTML = "";
+  lista.appendChild(criar("div", "esqueleto alto"));
+  try {
+    const dados = await api("GET", "/api/agenda");
+    agenda = dados.eventos;
+    if (!agenda.length) {
+      lista.innerHTML = "";
+      lista.appendChild(criar("p", "vazio", "Nenhum evento na agenda por enquanto."));
+      return;
+    }
+    desenharFiltrosEventos(dados);
+    desenharAgenda();
+  } catch (erro) {
+    lista.innerHTML = "";
+    lista.appendChild(criar("p", "vazio", "Não consegui carregar a agenda agora."));
+  }
 }
 
 // ---------- clima de Caruaru (Open-Meteo: gratuito, sem chave) ----------

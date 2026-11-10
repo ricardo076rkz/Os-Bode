@@ -32,12 +32,12 @@
   align-items: center;
   gap: 6px;
   padding: 8px 12px;
-  border: 1.5px solid var(--linha);
+  border: 1.5px solid var(--borda);
   border-radius: 999px;
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--barro);
-  background: var(--branco);
+  color: var(--cor-principal);
+  background: var(--superficie);
 }
 
 .sair [data-icone] {
@@ -55,7 +55,7 @@
 }
 
 .card-loja p {
-  color: var(--suave);
+  color: var(--texto-suave);
 }
 
 .card-loja a {
@@ -65,7 +65,7 @@
   margin-top: 10px;
   font-weight: 700;
   font-size: 0.9rem;
-  color: var(--barro);
+  color: var(--cor-principal);
 }
 
 .card-loja a [data-icone] {
@@ -81,8 +81,8 @@
 }
 
 .mini {
-  background: var(--branco);
-  border: 1.5px solid var(--linha);
+  background: var(--superficie);
+  border: 1.5px solid var(--borda);
   border-radius: var(--raio);
   padding: 12px 4px 10px;
   text-align: center;
@@ -93,13 +93,13 @@
   font-family: var(--fonte-titulo);
   font-weight: 400;
   font-size: 1.35rem;
-  color: var(--barro);
+  color: var(--cor-principal);
 }
 
 .mini span {
   font-size: 0.7rem;
   font-weight: 600;
-  color: var(--suave);
+  color: var(--texto-suave);
 }
 
 .grade {
@@ -117,10 +117,10 @@
   min-height: 92px;
   padding: 14px;
   text-align: left;
-  background: var(--branco);
-  border: 1.5px solid var(--linha);
+  background: var(--superficie);
+  border: 1.5px solid var(--borda);
   border-radius: 16px;
-  color: var(--tinta);
+  color: var(--texto);
   font-family: inherit;
   font-size: 0.95rem;
   font-weight: 700;
@@ -135,16 +135,16 @@
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: var(--barro-claro);
-  color: var(--barro);
+  background: var(--cor-principal-suave);
+  color: var(--cor-principal);
 }
 
 .item:hover {
-  border-color: var(--barro);
+  border-color: var(--cor-principal);
 }
 
 .item:active {
-  background: var(--barro-claro);
+  background: var(--cor-principal-suave);
 }
 
 .item-largo {
@@ -164,8 +164,8 @@
 }
 
 .produto {
-  background: var(--branco);
-  border: 1.5px solid var(--linha);
+  background: var(--superficie);
+  border: 1.5px solid var(--borda);
   border-radius: 16px;
   padding: 10px;
 }
@@ -174,8 +174,8 @@
   height: 112px;
   margin-bottom: 10px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--barro), var(--barro-escuro));
-  color: rgba(255, 255, 255, 0.9);
+  background: linear-gradient(135deg, var(--cor-principal), var(--cor-principal-forte));
+  color: rgba(255, 255, 255, 0.92);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -195,7 +195,7 @@
 }
 
 .preco {
-  color: var(--barro);
+  color: var(--cor-principal);
   font-weight: 700;
   margin: 4px 0 10px;
 }
@@ -204,9 +204,9 @@
   width: 100%;
   padding: 8px;
   background: transparent;
-  border: 1.5px solid var(--linha);
+  border: 1.5px solid var(--borda);
   border-radius: 10px;
-  color: var(--suave);
+  color: var(--texto-suave);
   font-family: inherit;
   font-weight: 600;
   font-size: 0.85rem;
@@ -214,8 +214,8 @@
 }
 
 .remover:hover {
-  border-color: var(--barro);
-  color: var(--barro);
+  border-color: var(--cor-principal);
+  color: var(--cor-principal);
 }
 
 /* eventos */
@@ -224,9 +224,9 @@
 }
 
 .evento {
-  background: var(--branco);
-  border: 1.5px solid var(--linha);
-  border-left: 6px solid var(--sol);
+  background: var(--superficie);
+  border: 1.5px solid var(--borda);
+  border-left: 6px solid var(--cor-destaque);
   border-radius: 14px;
   padding: 12px 14px;
   margin-bottom: 12px;
@@ -239,11 +239,11 @@
 
 .evento-quando {
   font-weight: 700;
-  color: var(--barro);
+  color: var(--cor-principal);
 }
 
 .evento .local {
-  color: var(--suave);
+  color: var(--texto-suave);
   font-size: 0.82rem;
 }
 
@@ -253,8 +253,8 @@
 
 /* avaliações */
 .media-nota {
-  background: var(--branco);
-  border: 1.5px solid var(--linha);
+  background: var(--superficie);
+  border: 1.5px solid var(--borda);
   border-radius: 18px;
   padding: 18px;
   text-align: center;
@@ -266,18 +266,18 @@
   font-weight: 400;
   font-size: 3rem;
   line-height: 1.1;
-  color: var(--barro);
+  color: var(--cor-principal);
 }
 
 .media-nota small {
   display: block;
   margin-top: 2px;
-  color: var(--suave);
+  color: var(--texto-suave);
 }
 
 .aval {
-  background: var(--branco);
-  border: 1.5px solid var(--linha);
+  background: var(--superficie);
+  border: 1.5px solid var(--borda);
   border-radius: 14px;
   padding: 12px 14px;
   margin-top: 12px;
@@ -295,7 +295,7 @@
 }
 
 .aval small {
-  color: var(--suave);
+  color: var(--texto-suave);
 }
 
 /* estatísticas */
@@ -306,8 +306,8 @@
 }
 
 .kpi {
-  background: var(--branco);
-  border: 1.5px solid var(--linha);
+  background: var(--superficie);
+  border: 1.5px solid var(--borda);
   border-radius: 16px;
   padding: 14px;
 }
@@ -315,7 +315,7 @@
 .kpi span {
   font-size: 0.8rem;
   font-weight: 600;
-  color: var(--suave);
+  color: var(--texto-suave);
 }
 
 .kpi strong {
@@ -324,7 +324,7 @@
   font-family: var(--fonte-titulo);
   font-weight: 400;
   font-size: 1.4rem;
-  color: var(--barro);
+  color: var(--cor-principal);
 }
 
 .grafico {
@@ -334,8 +334,8 @@
   gap: 8px;
   height: 200px;
   padding: 12px;
-  background: var(--branco);
-  border: 1.5px solid var(--linha);
+  background: var(--superficie);
+  border: 1.5px solid var(--borda);
   border-radius: 16px;
 }
 
@@ -348,12 +348,12 @@
   gap: 4px;
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--suave);
+  color: var(--texto-suave);
 }
 
 .barra {
   width: 100%;
-  background: var(--sol);
+  background: var(--cor-destaque);
   border-radius: 6px 6px 0 0;
   transition: height 0.6s;
 }
@@ -364,8 +364,8 @@
   bottom: 0;
   display: flex;
   margin: auto -20px 0;
-  background: var(--branco);
-  border-top: 1.5px solid var(--linha);
+  background: var(--superficie);
+  border-top: 1.5px solid var(--borda);
 }
 
 .menu-baixo button {
@@ -377,7 +377,7 @@
   padding: 10px 0 12px;
   background: none;
   border: none;
-  color: var(--suave);
+  color: var(--texto-suave);
   font-family: inherit;
   font-size: 0.68rem;
   font-weight: 600;
@@ -390,8 +390,8 @@
 }
 
 .menu-baixo button.ativo {
-  color: var(--barro);
+  color: var(--cor-principal);
   font-weight: 700;
-  box-shadow: inset 0 3px 0 var(--sol);
+  box-shadow: inset 0 3px 0 var(--cor-destaque);
 }
 .acoes-topo-linha { display: flex; align-items: center; gap: 8px; }

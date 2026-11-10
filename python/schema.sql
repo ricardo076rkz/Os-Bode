@@ -128,3 +128,25 @@ CREATE TABLE IF NOT EXISTS redefinicao_senha (
     expira_em  REAL NOT NULL,
     usada      INTEGER NOT NULL DEFAULT 0
 );
+
+-- ---------------------------------------------------------------- agenda da cidade
+-- Eventos e feiras de Caruaru. Para incluir um novo, basta uma linha aqui
+-- (ou no arquivo python/dados/eventos_cidade.json): a tela monta o card sozinha.
+CREATE TABLE IF NOT EXISTS evento_cidade (
+    id_evento_cidade INTEGER PRIMARY KEY AUTOINCREMENT,
+    slug        TEXT NOT NULL UNIQUE,
+    titulo      TEXT NOT NULL,
+    categoria   TEXT NOT NULL,
+    dia_semana  TEXT NOT NULL,           -- Segunda ... Domingo
+    periodo     TEXT NOT NULL CHECK (periodo IN ('manha', 'tarde', 'noite')),
+    horario     TEXT,                    -- só quando confirmado; vazio = "a confirmar"
+    local_nome  TEXT NOT NULL,
+    busca_mapa  TEXT,                    -- texto usado para achar o local no mapa
+    latitude    REAL,
+    longitude   REAL,
+    descricao   TEXT NOT NULL,
+    detalhes    TEXT NOT NULL DEFAULT '[]',   -- lista (JSON) de informações confirmadas
+    pendencias  TEXT NOT NULL DEFAULT '[]',   -- lista (JSON) do que ainda precisa ser validado
+    foto        TEXT,                    -- endereço ou data URL da foto (quando houver autorização/procedência)
+    ativo       INTEGER NOT NULL DEFAULT 1
+);

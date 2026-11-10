@@ -20,6 +20,7 @@ RAIZ = os.path.dirname(PASTA)
 load_dotenv(os.path.join(RAIZ, ".env"))
 
 import banco  # noqa: E402  (precisa vir depois do load_dotenv por causa do DB_PATH)
+import agenda  # noqa: E402
 import conta  # noqa: E402
 
 app = Flask(__name__, static_folder=None)
@@ -50,6 +51,7 @@ app.config.update(
 )
 app.teardown_appcontext(banco.fechar)
 banco.criar_tabelas()
+agenda.semear()
 
 DIAS = ["seg", "ter", "qua", "qui", "sex", "sab", "dom"]
 DIAS_EVENTO = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
@@ -741,6 +743,7 @@ for _nome, _valor in dict(ErroApi=ErroApi, dados_json=dados_json, texto=texto, s
                           usuario_logado=usuario_logado).items():
     setattr(_aj, _nome, _valor)
 conta.registrar_rotas(app, _aj)
+agenda.registrar_rotas(app)
 
 
 if __name__ == "__main__":

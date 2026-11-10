@@ -106,6 +106,7 @@ No `.env`, preencha `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMT
 ### Testes automáticos
 ```
 python tests/teste_api.py          # cadastro, login, permissões, loja, vitrine
+python tests/teste_agenda_api.py    # agenda de eventos da cidade
 python tests/teste_conta_api.py    # perfil, senha, sessões, notificações, recuperação, exclusão
 ```
 Cada um usa um banco temporário e imprime `FALHAS: 0` / `OK n FALHAS 0` quando passa.
@@ -171,3 +172,14 @@ O servidor precisa estar ligado em um computador e o celular/emulador acessa por
 - Notificações em tempo real (hoje é consulta a cada 30 s).
 - Trocar a senha do banco que ficou no histórico do GitHub (estava no `.env.exemplo` antigo).
 - Foto de fundo da estação ferroviária (`js/img/estacao.jpg` não existe).
+
+
+## Identidade visual (tokens) e agenda de eventos
+
+**Cores e fontes:** tudo vem das variáveis no topo de `style/style.css` (`--cor-principal`, `--cor-destaque`, `--fundo`, `--superficie`, `--texto`, `--borda` etc., com versões para o tema escuro). Para mudar a identidade, mude só ali. A cor principal é o "jenipapo" (violeta); o destaque quente ("caju") aparece com moderação. Fonte: Plus Jakarta Sans.
+
+**Agenda de Caruaru:** os eventos ficam na tabela `evento_cidade` e aparecem sozinhos na página inicial e em Explorar (cards, filtros por categoria e dia, detalhes e botão "Ver no mapa"). Os eventos que os comerciantes anunciam entram na mesma agenda.
+
+Para **incluir um novo evento**, acrescente um item em `python/dados/eventos_cidade.json` (campos: `slug` único, `titulo`, `categoria`, `dia_semana`, `periodo` = manha/tarde/noite, `horario` só se confirmado, `local_nome`, `busca_mapa`, `descricao`, `detalhes`, `pendencias`, `foto`) e reinicie o servidor. Não é preciso mexer no layout.
+
+**Regra de ouro:** só entra o que está confirmado. O que ainda falta validar vai em `pendencias` e aparece como "Pendente de validação". Hoje a Feira de Frutas e Verduras (quinta, manhã) e o Motofest (quinta, noite), ambos na Estação Ferroviária, estão sem horário, programação e fotos, por isso mostram "horário a confirmar". Fotos só devem ser colocadas (campo `foto`) com procedência e autorização confirmadas.
