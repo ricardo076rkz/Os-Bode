@@ -7,7 +7,7 @@ import json
 import os
 import sqlite3
 
-from flask import jsonify, request
+from flask import jsonify
 
 import banco
 

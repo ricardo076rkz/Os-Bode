@@ -1,5 +1,5 @@
 """Testes da gamificação (pontos, carteira, promoções, vouchers, Nordestinando+). Banco temporário."""
-import os, sys, tempfile, hmac, hashlib, json, threading
+import os, sys, tempfile, hmac, hashlib, json
 os.environ["DB_PATH"] = tempfile.mkdtemp() + "/t.db"; os.environ["SECRET_KEY"] = "x"
 os.environ["ADMIN_TOKEN"] = "adm"; os.environ.pop("PAGAMENTO_DEMO", None); os.environ.pop("PAGAMENTO_WEBHOOK_SEGREDO", None)
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "python"))

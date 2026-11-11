@@ -127,8 +127,12 @@ O navegador precisa de internet para essas consultas. Se uma falhar, o resto con
 
 | Onde | O que tem |
 |---|---|
-| `python/app.py` | Rotas da API, validações, login e permissões |
-| `python/schema.sql` | Tabelas: usuario, logista, loja, item_vitrine, avaliacao, pedido, evento |
+| `python/app.py` | Rotas principais da API, validações, login, permissões e segurança |
+| `python/conta.py` | Perfil, notificações, configurações, sessões e redefinição de senha |
+| `python/agenda.py` | Agenda de eventos de Caruaru (dados em `python/dados/eventos_cidade.json`) |
+| `python/gamificacao.py` | Pontos, carteira, promoções, vouchers e Nordestinando+ (regras em `python/dados/regras_pontos.json`) |
+| `python/lgpd.py` | Aceite dos termos, exportação de dados e retenção (LGPD) |
+| `python/schema.sql` | Todas as tabelas do banco (SQLite) |
 | `python/banco.py` | Conexão com o banco |
 | `python/requirements.txt` | Dependências do Python (Flask e python-dotenv) |
 | `js/api.js` | Conversa com o servidor e mostra erros nos campos |
@@ -136,7 +140,7 @@ O navegador precisa de internet para essas consultas. Se uma falhar, o resto con
 | `js/icones.js` | Ícones SVG |
 | `js/comum.js` | Máscaras, horários, "aberto agora" e funções pequenas |
 | `js/*.js` (demais) | Um script por tela |
-| `style/style.css`, `style/loja.css` | Visual: barro (vermelho do logo), sol, mata e papel, com as bandeirinhas de São João |
+| `style/style.css`, `style/loja.css` | Visual do app (roxo e laranja, tema claro/escuro), em formato de celular |
 | `sql/banco.sql` | Modelagem original do grupo (referência) |
 | `python/Models`, `python/Repository` | Versão antiga com SQLAlchemy/PostgreSQL, **não usada** |
 
@@ -198,3 +202,11 @@ Para **incluir um novo evento**, acrescente um item em `python/dados/eventos_cid
 ## LGPD
 
 Aceite obrigatório e versionado nos cadastros, páginas `privacidade.html` e `termos.html`, exportação e exclusão dos dados pelo próprio titular, retenção automática de dados técnicos e mapa de dados em [`docs/LGPD.md`](docs/LGPD.md). Defina `LGPD_CONTATO_EMAIL` e `LGPD_CONTROLADOR` no `.env`. Testes: `python tests/teste_lgpd_api.py`.
+
+## Segurança (resumo)
+
+Senhas com hash, sessões revogáveis, limite de tentativas, checagem de origem nos pedidos que alteram dados (defesa extra contra CSRF), erros 500 sem detalhes internos, bloqueio de acesso a arquivos internos (`.env`, `python/`, `.git`) e cabeçalhos de segurança. Testes: `python tests/teste_seguranca_api.py`.
+
+## Limpeza feita
+
+O código antigo não usado (pastas `Controller`, `Models`, `Repository`, `Service`, `Exception`, `java/` e arquivos vazios) foi removido do projeto; continua guardado na branch `main-anterior` do GitHub, se precisar consultar.

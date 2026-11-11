@@ -12,7 +12,9 @@ from datetime import timedelta
 from functools import wraps
 
 from dotenv import load_dotenv
-from flask import Flask, jsonify, request, send_from_directory, session
+from urllib.parse import urlsplit
+
+from flask import Flask, jsonify, request, send_from_directory
 from werkzeug.security import check_password_hash, generate_password_hash
 
 PASTA = os.path.dirname(os.path.abspath(__file__))
@@ -77,6 +79,24 @@ def tratar_erro(e):
 @app.errorhandler(413)
 def muito_grande(e):
     return jsonify({"erro": "Arquivo grande demais.", "campos": {}}), 413
+
+
+@app.errorhandler(500)
+def erro_interno(e):
+    app.logger.exception("Erro interno em %s", request.path)
+    if request.path.startswith("/api/"):
+        return jsonify({"erro": "Algo deu errado do nosso lado. Tente de novo em instantes.", "campos": {}}), 500
+    return "Erro interno", 500
+
+
+@app.before_request
+def mesma_origem():
+    """Defesa extra contra CSRF: pedidos que alteram dados só valem se vierem do próprio site.
+    (O navegador sempre envia o cabeçalho Origin nesses pedidos; chamadas do servidor para o webhook de pagamento não enviam.)"""
+    if request.method in ("POST", "PUT", "PATCH", "DELETE"):
+        origem = request.headers.get("Origin")
+        if origem and urlsplit(origem).netloc != request.host:
+            raise ErroApi("Pedido de origem não permitida.", status=403)
 
 
 @app.errorhandler(404)
@@ -327,8 +347,10 @@ def manifesto():
 @app.route("/<path:caminho>")
 def arquivos(caminho):
     # só entrega as pastas do site (nunca python/, sql/, .env, .git...)
-    topo = caminho.split("/")[0]
-    if caminho != "index.html" and topo not in ("html", "js", "style"):
+    partes = caminho.replace("\\", "/").split("/")
+    if ".." in partes or "." in partes or "" in partes or any(p.startswith(".") for p in partes):
+        return "Página não encontrada", 404  # nada de ../ nem de arquivos ocultos (.env, .git)
+    if caminho != "index.html" and partes[0] not in ("html", "js", "style"):
         return "Página não encontrada", 404
     return send_from_directory(RAIZ, caminho)
 
