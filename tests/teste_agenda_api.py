@@ -19,7 +19,7 @@ f, m = ev["Feira de Frutas e Verduras"], ev["Motofest"]
 t("feira é de manhã e motofest à noite", f["periodo"] == "manha" and m["periodo"] == "noite")
 t("os dois na quinta, na Estação", f["dia"] == m["dia"] == "Quinta" and "Estação" in f["local"] and "Estação" in m["local"])
 t("são eventos distintos", f["id"] != m["id"])
-t("sem horário inventado", f["horario"] is None and m["horario"] is None)
+t("horários informados pelo dono do projeto", f["horario"] == "05:00 às 09:00" and m["horario"] == "20:00 às 23:00")
 t("pendências registradas", len(f["pendencias"]) >= 1 and len(m["pendencias"]) >= 1)
 t("sem foto inventada", f["foto"] is None and m["foto"] is None)
 t("categorias", set(d["categorias"]) >= {"Feira", "Motos"})
