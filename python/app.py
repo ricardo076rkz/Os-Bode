@@ -319,6 +319,11 @@ def inicio():
     return send_from_directory(RAIZ, "index.html")
 
 
+@app.route("/manifest.webmanifest")
+def manifesto():
+    return send_from_directory(RAIZ, "manifest.webmanifest", mimetype="application/manifest+json")
+
+
 @app.route("/<path:caminho>")
 def arquivos(caminho):
     # só entrega as pastas do site (nunca python/, sql/, .env, .git...)

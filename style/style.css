@@ -78,7 +78,7 @@ body {
 }
 
 .tela.larga {
-  max-width: 1080px;
+  max-width: 520px; /* app de celular: mesma largura em todas as telas */
 }
 
 @media (min-width: 700px) {
@@ -1189,13 +1189,6 @@ textarea {
 .agenda-mini { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; color: var(--texto); }
 .agenda-mini strong { font-size: 1rem; }
 .agenda-mini small { color: var(--texto-suave); }
-@media (min-width: 900px) {
-  .hero { grid-template-columns: 1fr 1.1fr; align-items: center; gap: 48px; margin-top: 40px; }
-  .hero-texto h1 { font-size: 3.2rem; }
-  .hero-texto .botao { max-width: 320px; }
-  .hero-imagem { aspect-ratio: 4 / 3; }
-  .agenda-grade { grid-template-columns: repeat(4, 1fr); }
-}
 
 /* selos de período dos eventos: cor por momento do dia, sempre com texto */
 .selo-periodo { align-self: flex-start; padding: 3px 10px; border-radius: 999px; font-size: 0.74rem; font-weight: 700; }
@@ -1224,8 +1217,6 @@ textarea {
 .pendente { font-size: 0.78rem; color: var(--cor-destaque-forte); background: var(--cor-destaque-suave); padding: 4px 10px; border-radius: 8px; align-self: flex-start; }
 .evento-corpo .acoes { margin-top: auto; padding-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; }
 .mini-botao.cheio { background: var(--cor-principal); border-color: var(--cor-principal); color: var(--sobre-principal); }
-@media (min-width: 760px) { .agenda-grade2 { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1000px) { #lista-lojas { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 14px; } .mapa-grande { height: 360px; } }
 
 dialog#detalhe-evento { width: min(520px, calc(100% - 24px)); max-height: 88vh; margin: auto; padding: 20px; border: 0; border-radius: 20px; background: var(--superficie); color: var(--texto); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35); overflow-y: auto; }
 dialog#detalhe-evento::backdrop { background: rgba(15, 12, 30, 0.55); }
@@ -1236,11 +1227,6 @@ dialog#detalhe-evento .descricao-evento { margin: 12px 0 8px; }
 .lista-detalhes { margin: 6px 0 0 18px; display: grid; gap: 4px; font-size: 0.92rem; }
 .caixa-pendente { margin-top: 16px; padding: 12px 14px; border-radius: 12px; background: var(--cor-destaque-suave); color: var(--cor-destaque-forte); font-size: 0.9rem; }
 dialog#detalhe-evento .botoes-linha { margin-top: 16px; }
-@media (min-width: 900px) {
-  .agenda-dia { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 16px; align-items: start; }
-  .agenda-dia-titulo { grid-column: 1 / -1; }
-  .agenda-grade2 { grid-template-columns: 1fr; }
-}
 .hero .esqueci { display: block; margin-top: 14px; text-align: left; }
 .topo { padding-top: 26px; }
 
@@ -1323,3 +1309,17 @@ dialog#dialogo-voucher::backdrop, dialog#dialogo-avaliar::backdrop { background:
 .aceite a { color: var(--cor-principal); font-weight: 700; }
 dialog#dialogo-aceite { width: min(480px, calc(100% - 24px)); margin: auto; padding: 20px; border: 0; border-radius: 20px; background: var(--superficie); color: var(--texto); box-shadow: 0 24px 80px rgba(0,0,0,.35); }
 dialog#dialogo-aceite::backdrop { background: rgba(15, 12, 30, 0.6); }
+
+
+/* ---------- jeito de app de celular ---------- */
+html { background: var(--fundo-pagina); }
+body { overscroll-behavior-y: none; }
+.tela { padding-left: max(20px, env(safe-area-inset-left)); padding-right: max(20px, env(safe-area-inset-right)); padding-bottom: max(32px, env(safe-area-inset-bottom)); }
+.botao, .mini-botao, .chip, .aba, button, a.botao { touch-action: manipulation; min-height: 44px; }
+.mini-botao, .chip { min-height: 40px; }
+input, select, textarea { font-size: 16px; } /* evita o zoom automático do iPhone ao digitar */
+@media (min-width: 700px) {
+  /* no computador: o app aparece como um celular no meio da tela */
+  body { background: var(--fundo-pagina); }
+  .tela { margin-top: 16px; margin-bottom: 16px; min-height: calc(100vh - 32px); border-radius: 28px; box-shadow: 0 0 0 1px var(--borda), 0 24px 70px rgba(21, 19, 31, 0.18); }
+}

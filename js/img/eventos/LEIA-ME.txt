@@ -1,0 +1,3 @@
+Coloque aqui as fotos reais dos eventos (de sua autoria ou com autorização/licença livre).
+Depois, em python/dados/eventos_cidade.json, no evento, adicione:  "foto": "../js/img/eventos/NOME-DO-ARQUIVO.jpg"
+e reinicie o servidor. A foto aparece no card do evento.

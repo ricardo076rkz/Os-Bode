@@ -17,7 +17,7 @@ PERIODOS = {"manha": "Manhã", "tarde": "Tarde", "noite": "Noite"}
 
 
 def semear():
-    """Insere os eventos do arquivo JSON que ainda não existem (não mexe nos que já estão no banco)."""
+    """Insere os eventos do arquivo JSON e atualiza os que já existem (o arquivo é a fonte; edite-o para corrigir um evento)."""
     if not os.path.exists(ARQUIVO_SEED):
         return
     with open(ARQUIVO_SEED, encoding="utf-8") as f:
@@ -25,10 +25,13 @@ def semear():
     con = sqlite3.connect(banco.CAMINHO_BANCO)
     for e in eventos:
         con.execute(
-            """INSERT OR IGNORE INTO evento_cidade
+            """INSERT INTO evento_cidade
                (slug, titulo, categoria, dia_semana, periodo, horario, local_nome, busca_mapa, latitude, longitude,
                 descricao, detalhes, pendencias, foto)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+               ON CONFLICT(slug) DO UPDATE SET titulo = excluded.titulo, categoria = excluded.categoria, dia_semana = excluded.dia_semana,
+                 periodo = excluded.periodo, horario = excluded.horario, local_nome = excluded.local_nome, busca_mapa = excluded.busca_mapa,
+                 descricao = excluded.descricao, detalhes = excluded.detalhes, pendencias = excluded.pendencias, foto = excluded.foto""",
             (
                 e["slug"], e["titulo"], e["categoria"], e["dia_semana"], e["periodo"], e.get("horario"),
                 e["local_nome"], e.get("busca_mapa"), e.get("latitude"), e.get("longitude"), e["descricao"],

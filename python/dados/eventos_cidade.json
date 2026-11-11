@@ -1,46 +1,44 @@
 [
-  {
-    "slug": "feira-frutas-verduras-estacao",
-    "titulo": "Feira de Frutas e Verduras",
-    "categoria": "Feira",
-    "dia_semana": "Quinta",
-    "periodo": "manha",
-    "horario": null,
-    "local_nome": "Estação Ferroviária de Caruaru",
-    "busca_mapa": "Estação Ferroviária, Caruaru, PE, Brasil",
-    "descricao": "Feira popular que acontece nas manhãs de quinta-feira na Estação Ferroviária, com frutas, verduras e produtos frescos.",
-    "detalhes": [
-      "Venda de frutas",
-      "Verduras e produtos frescos",
-      "Movimento de comerciantes e consumidores",
-      "Ambiente de feira popular",
-      "Acontece pela manhã (não é o mesmo evento da noite de quinta)"
-    ],
-    "pendencias": [
-      "Horário exato de abertura e encerramento",
-      "Fotografias do evento (com procedência confirmada)"
-    ]
-  },
-  {
-    "slug": "motofest-estacao",
-    "titulo": "Motofest",
-    "categoria": "Motos",
-    "dia_semana": "Quinta",
-    "periodo": "noite",
-    "horario": null,
-    "local_nome": "Estação Ferroviária de Caruaru",
-    "busca_mapa": "Estação Ferroviária, Caruaru, PE, Brasil",
-    "descricao": "Encontro do público motociclista na Estação Ferroviária, na noite de quinta-feira: uma opção de entretenimento e encontro na cidade.",
-    "detalhes": [
-      "Voltado ao público motociclista",
-      "Acontece à noite (não é o mesmo evento da feira da manhã)",
-      "Opção de entretenimento e encontro em Caruaru"
-    ],
-    "pendencias": [
-      "Horário de início e término",
-      "Programação e atrações",
-      "Valor de entrada, se houver",
-      "Fotografias do evento (com procedência confirmada)"
-    ]
-  }
+ {
+  "slug": "feira-frutas-verduras-estacao",
+  "titulo": "Feira de Frutas e Verduras",
+  "categoria": "Feira",
+  "dia_semana": "Quinta",
+  "periodo": "manha",
+  "horario": "05:00 às 09:00",
+  "local_nome": "Estação Ferroviária de Caruaru",
+  "busca_mapa": "Estação Ferroviária, Caruaru, PE, Brasil",
+  "descricao": "Feira popular que acontece nas manhãs de quinta-feira na Estação Ferroviária, com frutas, verduras e produtos frescos.",
+  "detalhes": [
+   "Venda de frutas",
+   "Verduras e produtos frescos",
+   "Movimento de comerciantes e consumidores",
+   "Ambiente de feira popular",
+   "Acontece pela manhã (não é o mesmo evento da noite de quinta)"
+  ],
+  "pendencias": [
+   "Fotografias do evento (com procedência confirmada)"
+  ]
+ },
+ {
+  "slug": "motofest-estacao",
+  "titulo": "Motofest",
+  "categoria": "Motos",
+  "dia_semana": "Quinta",
+  "periodo": "noite",
+  "horario": "20:00 às 23:00",
+  "local_nome": "Estação Ferroviária de Caruaru",
+  "busca_mapa": "Estação Ferroviária, Caruaru, PE, Brasil",
+  "descricao": "Encontro do público motociclista na Estação Ferroviária, na noite de quinta-feira, com banda de rock ao vivo e entrada gratuita.",
+  "detalhes": [
+   "Voltado ao público motociclista",
+   "Banda de rock ao vivo",
+   "Entrada gratuita",
+   "Acontece à noite (não é o mesmo evento da feira da manhã)"
+  ],
+  "pendencias": [
+   "Nome da banda e demais atrações",
+   "Fotografias do evento (com procedência confirmada)"
+  ]
+ }
 ]
